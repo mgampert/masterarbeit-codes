@@ -1,0 +1,237 @@
+\documentclass{mumie.problem.gwtmathlet}
+\begin{metainfo}
+  \name{
+    \lang{de}{Aufgabe und Visualisierung zur Bestimmung der Eigenschaften von $O(2)$}
+    \lang{en}{Task and visualization for the determination of the characteristics of $O(2)$}
+  }
+  \begin{description}
+    \lang{en}{...}
+    \lang{de}{...}
+  \end{description}
+  \corrector{system/problem/GenericCorrector.meta.xml}
+  \begin{components}
+
+           \component{js_lib}{system/problem/GenericMathlet.meta.xml}{gwtmathlet}
+  \end{components}
+ 
+  \begin{links}
+
+  \end{links}
+  \creategeneric
+\end{metainfo}
+
+\usepackage{mumie.genericproblem}
+
+\begin{content}
+\begin{block}[annotation]
+Copy of : /home/mumie/checkin/content/playground/Matthias_Gampert/art_Orthogonale_Gruppe.src.tex
+\end{block}
+
+
+\title{
+  \lang{de}{Graphisches Bestimmen der Eigenschaften von $O(2)$}
+  \lang{en}{Graphical determination of the properties of $O(2)$}}
+
+\begin{visualizationwrapper}
+\begin{visualization}[false]{ortho_matrix}
+\begin{variables}
+    \question{1}{a11}
+    \question{1}{a21}
+    \question{1}{a12}
+    \question{1}{a22}
+    
+    \randint[Z]{x1}{-4}{4}
+    \randint{x2}{-4}{4}
+    \randint{y1}{-4}{4}
+    \randint[Z]{y2}{-4}{4}
+
+    \checkbox{winkelToggle}{0}
+    \checkbox{vToggle}{0}
+    \checkbox{fToggle}{0}
+    
+    \point{ursprung}{0,0}
+    \number[calculate]{yy1}{vToggle*y1}
+    \number[calculate]{yy2}{vToggle*y2}
+    \point[editable]{p1}{x1,x2}
+    \point{p2}{yy1,yy2}
+    \vector{u}{p1}
+    \vector{v}{p2}
+    
+    \number[calculate]{Au1}{a11*p1[x]+a12*p1[y]}
+    \number[calculate]{Au2}{a21*p1[x]+a22*p1[y]}
+    \point{q1}{Au1,Au2}
+    \vector{Au}{q1}
+    
+    \number[calculate]{Av1}{vToggle*(a11*p2[x]+a12*p2[y])}
+    \number[calculate]{Av2}{vToggle*(a21*p2[x]+a22*p2[y])}
+    \point{q2}{Av1,Av2}
+    \vector{Av}{q2}
+
+    \parametricFunction{f}{fToggle*(sqrt(p1[x]^2+p1[y]^2)*cos(t)), fToggle*(sqrt(p1[x]^2+p1[y]^2)*sin(t)), 0, 2*pi}
+
+    \angle{alpha_0}{ursprung, p1, p2}
+    \number{winkel}{winkelToggle*(alpha_0-2*pi*theta(alpha_0-pi))}
+    \angle{alpha}{ursprung, p1, winkel, 2}
+    \angle{beta_0}{ursprung, q1, q2}
+    \number{winkel2}{winkelToggle*(beta_0-2*pi*theta(beta_0-pi))}
+    \angle{beta}{ursprung, q1, winkel2, 1}
+
+\color{u,p1,Au,q1}{RED}
+\color{f}{LIGHT_RED}
+\color{v,p2,Av,q2}{BLUE}
+\color{alpha}{DARK_GREEN}
+\color{beta}{GREEN}
+\label{u}{${u}$}
+\label{v}{${v}$}
+\label{Au}{${Au}$}
+\label{Av}{${Av}$}
+\lang{de}{\label{vToggle}{Anzeige von $v$ und $Av$}
+          \label{winkelToggle}{Anzeige der Winkel zwischen $u,v$, sowie zwischen $Au,Av$}
+          \label{fToggle}{Anzeige von $B_{\|u\|}(0)$}}
+\lang{en}{\label{vToggle}{Display of $v$ and $Av$}
+          \label{winkelToggle}{Display of the angles between $u,v$ and the angles between $Au,Av$}
+          \label{fToggle}{Display of $B_{\|u\|}(0)$}}
+\style{p1,p2,q1,q2}{size:0}
+\style{Au,Av}{dash:2}
+\end{variables}
+
+  \begin{canvas}
+     \plotSize{400,400}  
+     \plotLeft{-5}
+     \plotRight{5}
+     \plotTop{5}
+     \plotBottom{-5}
+     \plot[coordinateSystem,noMouseZooming]{u,p1,v,p2,Au,q1,Av,q2,f,alpha,beta,vToggle,winkelToggle,fToggle}
+  \end{canvas}
+\end{visualization}
+\end{visualizationwrapper}
+
+\begin{problem}
+  \begin{question}
+  \precision{3}
+    \begin{variables}
+      \randint[Z]{a11_pre}{-5}{5}
+      \randint{a21_pre}{-5}{5}
+      \randint{a12_pre}{-5}{5}
+      \randint[Z]{a22_pre}{-5}{5}
+      \randadjustIf{a12_pre}{a11_pre*a22_pre-a21_pre*a12_pre=0}
+      \function[calculate]{abs1}{sqrt(a11_pre^2+a21_pre^2)}
+      \function[calculate]{a11}{a11_pre/abs1}
+      \function[calculate]{a21}{a21_pre/abs1}
+      \function[calculate]{scpr}{a11*a12_pre+a21*a22_pre}
+      \function[calculate]{a12_pr}{a12_pre-scpr*a11}
+      \function[calculate]{a22_pr}{a22_pre-scpr*a21}
+      \function[calculate]{abs2}{sqrt(a12_pr^2+a22_pr^2)}
+      \function[calculate]{a12}{a12_pr/abs2}
+      \function[calculate]{a22}{a22_pr/abs2}
+      \pmatrix{aa}{a11 & a12\\ a21 & a22}
+      \function[calculate]{detA}{a11*a22-a12*a21}
+      \function[calculate]{bool_det}{(1+detA)/2}
+      \pmatrix{aat}{transpose(aa)}
+      \pmatrix{vrbl}{x\\ y}
+    \end{variables}
+
+  \begin{answer}
+  \type{input.matrix}
+  %\format{2}{2}
+  \format{-1}{-1}
+  \lang{de}{\text{Sei $f:\R^2\to\R^2 \, \,,\var{vrbl}\mapsto A\cdot\var{vrbl}$ bezüglich der Standardbasis mit der orthogonalen Matrix $A=\var{aa}$.\\
+        Das bedeutet $A$ ist invertierbar und es gilt $A^{-1}=$}}
+  \lang{en}{\text{Let $f:\R^2\to\R^2 \, \,,\var{vrbl}\mapsto A\cdot\var{vrbl}$ be with respect to the standard basis with the orthogonal matrix $A=\var{aa}$.\\
+        This means that $A$ is invertible and the following applies $A^{-1}=$}}
+  \solution{aat}
+  \lang{de}{
+  \explanation[NOT edited]{Sie haben keine inverse Matrix eingegeben.}
+  \explanation[edited AND NOT equal(ans,aat) AND attempt =1]{Orthogonale Matrizen besitzen die Eigenschaft, dass ihre Transponierte gleichzeitig die Inverse ist.}
+  \explanation[edited AND NOT equal(ans,aat) AND attempt >=2]{Berechnet man $A^T\cdot A$ erhält man die Einheitsmatrix. Genauso, wenn man $A\cdot A^T$ berechnet. Dementsprechend ist die Inverse von $A$ durch $A^T=\var{aat}$ gegeben.}}
+  \lang{en}{
+  \explanation[NOT edited]{You have not entered an inverse matrix.}
+  \explanation[edited AND NOT equal(ans,aat) AND attempt =1]{Orthogonal matrices have the property that their transpose is also their inverse.}
+  \explanation[edited AND NOT equal(ans,aat) AND attempt >=2]{Calculating $A^T\cdot A$ yields the identity matrix. The same applies when calculating $A\cdot A^T$. Accordingly, the inverse of $A$ is given by $A^T=\var{aat}$.}}
+  \end{answer}
+
+  \begin{answer}
+    \lang{de}{\text{Bestimmen Sie graphisch weitere Eigenschaften von $A$. \\
+              Dazu können Sie den Vektor $\textcolor{red}{u}$ im Raum verschieben. \\
+              Sie können ebenfalls die checkboxen in der Visualisierung unten links nutzen und sich an den Multiple-Choice Aussagen orientieren. \\
+              \visualization{ortho_matrix}}}
+    \lang{en}{\text{Determine further properties of $A$ graphically. \\
+              To do this, you can move the vector $\textcolor{red}{u}$. \\
+              You can also use the checkboxes in the visualization at the bottom left and refer to the multiple-choice statements. \\
+              \visualization{ortho_matrix}}}
+
+    \type{mc.multiple}
+    \permutechoices[5][6,7]{1}{7}
+    \begin{choice}
+      \lang{de}{\text{$A$ erhält die euklidische Norm. Das heißt $\|u\|=\|A\cdot u\|$.}}
+      \lang{en}{\text{$A$ preserves the euclidean norm. That is, $\|u\|=\|A\cdot u\|$.}}
+      \solution{true}
+    \end{choice}
+    
+    \begin{choice}
+      \lang{de}{\text{$A$ erhält Winkel.}}
+      \lang{en}{\text{$A$ preserves angles.}}
+      \solution{true}
+    \end{choice}
+    
+    \begin{choice}
+      \lang{de}{\text{Das Standardskalarprodukt bleibt invariant unter $A$. Das heißt $\langle u,v\rangle=\langle Au,Av\rangle$.}}
+      \lang{en}{\text{The standard scalar product remains invariant under $A$. That is, $\langle u,v\rangle=\langle Au,Av\rangle$.}}
+      \solution{true}
+    \end{choice}
+
+    \begin{choice}
+      \lang{de}{\text{Es gibt Vektoren $u,v$, sodass $\|u-v\|\neq\|Au-Av\|$ gilt.}}
+      \lang{en}{\text{There exist vectors $u,v$ such that $\|u-v\|\neq\|Au-Av\|$.}}
+      \solution{false}
+    \end{choice}
+
+    \begin{choice}
+      \lang{de}{\text{Es gilt $\det(A)=1$.}}
+      \lang{en}{\text{$\det(A)=1$ applies.}}
+      \solution{compute}
+      \checkCorrect{detA=1}
+    \end{choice}
+    
+    \begin{choice}
+      \lang{de}{\text{$A$ stellt eine Drehung um den Koordinatenursprung in der euklidischen Ebene dar.}}
+      \lang{en}{\text{$A$ represents a rotation around the origin in the Euclidean space.}}
+      \solution{compute}
+      \checkCorrect{detA=1}
+    \end{choice}
+
+    \begin{choice}
+      \lang{de}{\text{$A$ stellt eine Spiegelung an einer Ursprungsgerade in der euklidischen Ebene dar.}}
+      \lang{en}{\text{$A$ represents a reflection across a line of origin in the Euclidean space.}}
+      \solution{compute}
+      \checkCorrect{detA=-1}
+    \end{choice}
+
+    \lang{de}{
+    \explanation[equalChoice(0??????)]{Lassen Sie sich $B_{\|u\|}(0)$ anzeigen. Sie erkennen, dass auch $Au$ auf dem Kreis liegt.}
+    \explanation[equalChoice(?0?????)]{Lassen Sie sich $v$ und die Winkel zwischen den Vektoren in der Visualisierung anzeigen. \\
+      Sie können erkennen, dass die Winkel zwischen den Bildvektoren gleich groß sind.}
+    \explanation[equalChoice(??0????)]{Da sowohl Winkel als auch die euklidische Norm unter dem Bild von $A$ erhalten bleiben, wird auch das Standardskalarprodukt erhalten.}
+    \explanation[equalChoice(???1???)]{Indem Sie sich $B_{\|u\|}(0)$ anzeigen lassen, erkennen Sie, dass $A$ die euklidische Norm erhält. \\
+      Da $A\cdot u-A\cdot v=A\cdot(u-v)$ gibt es keine Vektoren, für die die Gleichung nicht erfüllt ist.}
+    \explanation[[equalChoice(????0??) OR equalChoice(?????0?)] AND [detA=1]]{Verschieben Sie den Vektor $u$ und beobachten dabei $Au$. Sie können sehen, dass der Winkel zwischen den beiden Vektoren immer gleich bleibt. Also muss $A$ eine Drehung um den Koordinatenursprung darstellen. Das bedeutet $\det(A)=1$.}
+    \explanation[[equalChoice(????1??) OR equalChoice(?????1?)] AND detA=-1]{Verschieben Sie den Vektor $u$ und beobachten dabei $Au$. Sie können sehen, dass der Winkel zwischen den beiden Vektoren nicht immer gleich bleibt. Also kann $A$ keine Drehung um den Koordinatenursprung darstellen. Das bedeutet auch, dass $\det(A)\neq 1$.}
+    \explanation[equalChoice(??????0) AND detA=-1]{Verschieben Sie den Vektor $u$ und beobachten dabei $Au$. Es existiert eine Ursprungsgerade, deren Vektoren unter der Abbildung unverändert bleiben, d.h. für alle Vektoren $u$ auf dieser Geraden gilt $Au=u$. Für Vektoren, die orthogonal zu dieser Geraden stehen, gilt hingegen $Au=-u$. Also muss $A$ eine Spiegelung an einer Urpsungsgeraden darstellen.}
+    \explanation[equalChoice(??????1) AND detA=1]{Verschieben Sie den Vektor $u$ und beobachten dabei $Au$. Es existiert keine Ursprungsgerade, deren Vektoren unter der Abbildung unverändert bleiben. Also kann $A$ keine Spiegelung an einer Urpsungsgeraden darstellen.}}
+    \lang{en}{
+    \explanation[equalChoice(0??????)]{Display $B_{\|u\|}(0)$. You will see that $Au$ also lies on the circle.}
+    \explanation[equalChoice(?0?????)]{Display $v$ and the angles between the vectors in the visualization. \\
+      You can see that the angles between the image vectors are equal.}
+    \explanation[equalChoice(??0????)]{Since both the angle and the euclidean norm are preserved under the image of $A$, the standard scalar product is also preserved.}
+    \explanation[equalChoice(???1???)]{By displaying $B_{\|u\|}(0)$ you can see that $A$ preserves the euclidean norm. \\
+      Since $A\cdot u-A\cdot v=A\cdot(u-v)$, there are no vectors for which the equation is not satisfied.}
+    \explanation[[equalChoice(????0??) OR equalChoice(?????0?)] AND [detA=1]]{Move the vector $u$ and observe $Au$. You can see that the angle between the two vectors always remains the same. Therefore, $A$ must represent a rotation around the coordinate origin. This means that $\det(A)=1$.}
+    \explanation[[equalChoice(????1??) OR equalChoice(?????1?)] AND detA=-1]{Move the vector $u$ and observe $Au$. You can see that the angle between the two vectors does not always remain the same. Therefore, $A$ cannot represent a rotation around the coordinate origin. This also means that $\det(A)\neq 1$.}
+    \explanation[equalChoice(??????0) AND detA=-1]{Move the vector $u$ and observe $Au$. There is a line of origin whose vectors remain unchanged under the mapping, i.e., for all vectors $u$ on this line, $Au=u$. For vectors that are orthogonal to this line, however, $Au=−u$. Therefore, $A$ must represent a reflection on a line of origin.}
+    \explanation[equalChoice(??????1) AND detA=1]{Move the vector $u$ and observe $Au$. There is no origin line whose vectors remain unchanged under the mapping. Therefore, $A$ cannot represent a reflection on an origin line.}}
+  \end{answer}
+  \end{question}
+\end{problem}
+
+\embedmathlet{gwtmathlet}
+\end{content}

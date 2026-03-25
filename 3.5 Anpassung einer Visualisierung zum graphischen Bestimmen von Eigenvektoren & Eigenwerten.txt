@@ -1,0 +1,303 @@
+\documentclass{mumie.problem.gwtmathlet}
+\begin{metainfo}
+  \name{
+    \lang{en}{Graphical determination of eigenvectors and eigenvalues}
+    \lang{de}{Graphisches Bestimmen von Eigenvektoren und -werten}
+  }
+  \begin{description}
+    \lang{en}{...}
+    \lang{de}{...}
+  \end{description}
+  \corrector{system/problem/GenericCorrector.meta.xml}
+  \begin{components}
+            \component{js_lib}{system/problem/GenericMathlet.meta.xml}{gwtmathlet}
+  \end{components}
+
+  \creategeneric
+\end{metainfo}
+
+\usepackage{mumie.genericproblem}
+
+\begin{content}
+\begin{block}[annotation]
+Copy of : /home/mumie/checkin/content/playground/Matthias_Gampert/art_Eigenwerte_graphisch.src.tex
+\end{block}
+
+\begin{block}[annotation]
+Quelle: Aufgabenidee von Jörg Zintl / VISMATH T314_4\\
+\end{block}
+
+\title{
+  \lang{de}{Graphisches Bestimmen von Eigenvektoren und Eigenwerten}
+  \lang{en}{Graphical determination of eigenvectors and eigenvalues}
+  }
+
+\begin{visualizationwrapper}
+
+\begin{visualization}[false]{vis_graph_1a}
+
+ \begin{variables}
+   \question{1}{a11}
+   \question{1}{a12}
+   \question{1}{a21}
+   \question{1}{a22}
+
+   \point{ursprung}{0,0}
+   \point[editable]{v_point}{1,1}
+   \vector[editable]{v}{v_point}
+   \line{v_linie}{ursprung,v_point}
+   \point{fv_point}{a11*v_point[x]+a12*v_point[y], a21*v_point[x]+a22*v_point[y]}
+   \vector{fv}{fv_point} 
+   \line{fv_linie}{ursprung,fv_point}
+   
+   \point[editable]{u_point}{1,-1}
+   \vector[editable]{u}{u_point}
+   \line{u_linie}{ursprung,u_point}
+   \point{fu_point}{a11*u_point[x]+a12*u_point[y], a21*u_point[x]+a22*u_point[y]}
+   \point{u_point_small}{u_point[x],u_point[y]}
+   \point{fu_point_small}{fu_point[x],fu_point[y]}
+   \vector{fu}{fu_point} 
+   \line{fu_linie}{ursprung,fu_point}
+\end{variables}  
+
+   \color{v,v_point,u,u_point}{red}
+   \color[0.6]{v_linie,u_linie}{red}
+   \style{u,u_linie,fu,fu_linie}{dash:2}
+   \color{fv,fv_point,fu,fu_point}{green}
+   \color[0.6]{fv_linie,fu_linie}{green}
+   \style{u_point_small,fu_point_small}{size:1}
+   \color{u_point_small,fu_point_small}{white}
+   \label{v_point}{$v$}
+   \label{fv_point}{$f(v)$}
+   \label{u_point}{$u$}
+   \label{fu_point}{$f(u)$}
+       
+\begin{canvas}
+     \plotSize{400,400}
+     \plotTop{}
+     \plotBottom{-6}
+     \plotLeft{-6}
+     \plotRight{6}     
+     \plot[coordinateSystem,showPointCoords]{v,v_point,fv_point,fv,v_linie,fv_linie,u,u_point,u_point_small,fu_point,fu_point_small,fu,u_linie,fu_linie}
+\end{canvas}
+\lang{de}{\text{
+  Aktuell werden angezeigt: \\$ u = \var{u}, f(u)=\var{fu},$\\
+  $ v = \var{v}, f(v)=\var{fv}$
+}} 
+\lang{en}{\text{
+  Currently displayed: \\$ u = \var{u}, f(u)=\var{fu},$\\
+  $ v = \var{v}, f(v)=\var{fv}.$
+}}
+\end{visualization}
+
+\begin{visualization}[false]{vis_graph_1b}
+  \begin{variables}
+    \question{1}{a11}
+    \question{1}{a12}
+    \question{1}{a21}
+    \question{1}{a22}
+
+    \point{ursprung}{0,0}
+    \parametricFunction{s1}{cos(t), sin(t), 0, 2*pi}
+    \pointOnCurve{p}{s1,0}
+    \vector[editable]{v}{p}
+    \line{v_linie}{ursprung,p}
+    
+    \parametricFunction{As1}{a11*cos(t)+a12*sin(t), a21*cos(t)+a22*sin(t), 0, 2*pi}
+    \point{Ap}{a11*p[x]+a12*p[y],a21*p[x]+a22*p[y]}
+    \vector{Av}{Ap}
+  \end{variables}
+
+\color{s1,v,p}{red}
+\color[0.6]{v_linie}{red}
+\color{As1,Av}{green}
+\style{s1,As1,v_linie}{dash:2}
+\label{v}{${v}$}
+\label{Av}{${f(v)}$}
+
+  \begin{canvas}
+    \plotSize{350,350}
+    \plotTop{6}
+    \plotBottom{-6}
+    \plotLeft{-6}
+    \plotRight{6}     
+    \plot[coordinateSystem,showPointCoords]{s1,p,v,As1,Av,v_linie}
+  \end{canvas}
+
+  \text{Aktuell werden angezeigt: \\
+        $v=\var{v}$, $f(v)=\var{Av}$.}
+\end{visualization}
+\end{visualizationwrapper}
+
+\begin{problem}
+\begin{question}
+ \field{real}
+ \correctorprecision{1}
+
+ \begin{variables}
+  \number{null}{0}
+  \matrix{Nnull}{0}
+  \number{eins}{1}
+
+  \randint[Z]{ew1_pre}{-4}{4}
+  \randint[Z]{ew2_pre}{-4}{4}
+  \randadjustIf{ew2_pre}{ew1_pre=ew2_pre}
+  \function{ew1}{ew1_pre}
+  \function{ew2}{ew2_pre}
+  \matrix{D}{ew1 & 0 \\ 0 & ew2}
+
+  \randint{ev1}{-5}{5}
+  \randint[Z]{ev2}{-5}{5}
+  \pmatrix{S}{ev1 & ev1+ev2 \\ ev2 & ev2-ev1}
+  \pmatrix{T}{inv(S)}
+  \pmatrix[calculate]{A_pre}{S*D}
+  \pmatrix[calculate]{A}{A_pre*T}
+
+  \pmatrix{EVone}{ev1 & 0 \\ 0 & ev2}
+  \pmatrix[calculate]{EVtwo}{ev1+ev2 & 0 \\ 0 & ev2-ev1}
+  \pmatrix{e1}{1 \\ 1}
+  \pmatrix[calculate]{EV1}{EVone*e1}
+  \pmatrix[calculate]{EV2}{EVtwo*e1}
+  
+  \function[calculate]{a11}{A[0,0]}
+  \function[calculate]{a12}{A[0,1]}
+  \function[calculate]{a21}{A[1,0]}
+  \function[calculate]{a22}{A[1,1]}
+   
+  \pmatrix[calculate]{fev1}{A*EV1}
+  \pmatrix[calculate]{fev2}{A*EV2}  
+\end{variables}
+
+\lang{de}{\text{
+  Gegeben ist die lineare Abbildung $f: \R^2 \to \R^2$ mit $f(v)= A\cdot v$, wobei $v\in \R^2$ ein Vektor und $A = \var{A}$ eine $2\times 2$-Matrix ist. Hinweis: Die gegebene Matrix besitzt zwei unterschiedliche Eigenwerte und somit auch zwei linear unabhängige Eigenvektoren.  \\
+  \\
+%   In der untenstehenden interaktiven Grafik ist diese Abbildung $f$ hinterlegt. Zu den beliebig veränderbaren \textcolor{red}{roten} Vektoren $u$ und $v$ werden die zugehörigen Abbildungswerte $f(u)$ und $f(v)$ in \textcolor{green}{grün} angezeigt. Die durch die Vektoren definierten Geraden werden in den gleichen Farben angedeutet. \\
+%   \\
+  In der untenstehenden interaktiven Grafik ist diese Abbildung $f$ hinterlegt. Zu dem auf dem Einheitskreis veränderbaren Vektor $\textcolor{red}{v}$ wird der zugehörige Bildvektor $\textcolor{green}{f(v)}$ angezeigt.   
+  Bestimmen Sie damit die Eigenvektoren und die Eigenwerte der Matrix $A$. Die Eigenwerte sind ganzzahlig. Die Eigenvektoren können ebenfalls in ganzzahligen Komponenten angegeben werden. 
+  \\
+  % \visualization{vis_graph_1a}
+  \visualization{vis_graph_1b}
+}}
+\lang{en}{\text{Given is the linear map $f: \R^2 \to \R^2$ with $f(v)= A\cdot v$, where $v\in \R^2$ is a vector and $A = \var{A}$ is a $2\times 2$ matrix. Note: the given matrix has two distinct eigenvalues and therefore two linearly independent eigenvectors. \\
+  \\
+  In the interactive diagram below this map $f$ is implemented. For the freely adjustable \textcolor{red}{red} vectors $u$ and $v$, the corresponding images $f(u)$ and $f(v)$ are shown in \textcolor{green}{green}. The straight lines defined by the vectors are indicated in the same colours. \\
+  \\
+  Determine the eigenvectors and eigenvalues of the matrix $A$. Enter your answers rounded to one decimal place. \\
+  \\
+  \visualization{vis_graph_1a} 
+}}
+    
+	        \begin{answer}
+            \score{1}
+            \type{input.matrix}
+            \lang{de}{\text{\textbf{Antwort: } Erster Eigenvektor: $v_1 = $}}
+            \lang{en}{\text{\textbf{Answer: } First eigenvector: $v_1 = $}}
+            \format{2}{1}
+            \matrixType{pmatrix}
+            \inputAsMatrix{}{antwort_ev1}
+      \checkMatrixForZero{(antwort_ev1[0]*EV1[1]-antwort_ev1[1]*EV1[0])*(antwort_ev1[0]*EV2[1]-antwort_ev1[1]*EV2[0])}{-1}{1}{1}
+            \solution{EV1}
+            \lang{de}{
+              \explanation[NOT[edited]]{Geben Sie einen Eigenvektor $v_1$ ein!}
+              \explanation[edited AND NOT[correct(ans) AND attempt <=2] ]{
+                Die Bedingung für einen Eigenvektor $v_1\neq 0$ ist $A\cdot v_1 = \lambda_1 v_1$ für einen Skalar $\lambda_1 \in \R$. Anschaulich bedeutet diese Bedingung, dass die beiden Vektoren $f(v_1)$ und $v_1$ zwar unterschiedliche Längen und Richtungen haben können, jedoch die gleiche Gerade in $\R^2$ festlegen. \\
+                Wir finden also einen Eigenvektor dadurch, dass wir $v$ so verschieben, dass die zugehörige rote und grüne durchgezogene Gerade deckungsgleich werden.}
+              \explanation[edited AND NOT[correct(ans) AND attempt >=3] ]{
+                Die Bedingung für einen Eigenvektor $v_1\neq 0$ ist $A\cdot v_1 = \lambda_1 v_1$ für einen Skalar $\lambda_1 \in \R$. Anschaulich bedeutet diese Bedingung, dass die beiden Vektoren $f(v_1)$ und $v_1$ zwar unterschiedliche Längen und Richtungen haben können, jedoch die gleiche Gerade in $\R^2$ festlegen. \\
+                Wir finden also einen Eigenvektor dadurch, dass wir $v$ so verschieben, dass die zugehörige rote und grüne durchgezogene Gerade deckungsgleich werden. \\
+                Eine mögliche Lösung ist $v_1= \var{EV1}$, aber auch jedes Vielfache davon ist ein Eigenvektor.}
+              }
+            \lang{en}{
+              \explanation[NOT[edited]]{Enter an eigenvector $v_1$!}
+              \explanation[edited AND NOT[correct(ans) AND attempt <=2] ]{
+                The condition for an eigenvector $v_1\neq 0$ is $A\cdot v_1 = \lambda_1 v_1$ for some scalar $\lambda_1 \in \R$. Geometrically, this means that the two vectors $f(v_1)$ and $v_1$ may have different lengths and directions, but they must lie on the same line in $\R^2$. \\
+                Thus, we find an eigenvector by adjusting $v$ until the corresponding solid red and green lines coincide.}
+              \explanation[edited AND NOT[correct(ans) AND attempt >=3] ]{
+                The condition for an eigenvector $v_1\neq 0$ is $A\cdot v_1 = \lambda_1 v_1$ for some scalar $\lambda_1 \in \R$. Geometrically, this means that the two vectors $f(v_1)$ and $v_1$ may have different lengths and directions, but they must lie on the same line in $\R^2$. \\
+                Thus, we find an eigenvector by adjusting $v$ until the corresponding solid red and green lines coincide. \\
+                One possible solution is $v_1= \var{EV1}$, but any multiple of it is also an eigenvector.}
+              }              
+        \end{answer}
+
+          \begin{answer}
+            \score{1}
+            \type{input.function}
+            \lang{de}{\text{Eigenwert zum 1.  Eigenvektor: $\lambda_1 = $}}
+            \lang{en}{\text{Eigenvalue corresponding to the 1st eigenvector: $\lambda_1 = $}}  
+            \inputAsFunction{}{antwort_ew1}
+       \checkFuncForZero[0.01]{(|antwort_ew1-ew1| + |antwort_ev1[0]*EV1[1]-antwort_ev1[1]*EV1[0]|) *(|antwort_ew1-ew2|+|antwort_ev1[0]*EV2[1]-antwort_ev1[1]*EV2[0]|)}{-1}{1}{1}
+            \solution{ew1}
+            \lang{de}{
+              \explanation[NOT[edited]]{Geben Sie einen Eigenwert zum Eigenvektor $v_1$ ein!}
+              \explanation[ edited AND NOT[correct(ans_1)]]{Ohne Bezug auf einen korrekten Eigenvektor $v_1$ ist die Angabe des Eigenwerts $\lambda_1$ nicht bewertbar.}
+              \explanation[edited AND correct(ans_1) AND NOT [correct(ans)]]{Den Eigenwert $\lambda_1$ erhalten wir durch Vergleich der Koordinaten eines Eigenvektors, z. B. $v_1=\var{EV1}$, mit den Koordinaten seines Bildes $f(v_1)=\lambda_1 v_1 = \var{fev1}$. Der Quotient der $x$-Koordinaten beziehungsweise der $y$-Koordinaten ergibt $\lambda_1= \var{ew1}$.}
+              }            
+            \lang{en}{
+              \explanation[NOT[edited]]{Please enter an eigenvalue for the eigenvector $v_1$.}
+              \explanation[edited AND NOT[correct(ans_1)]]{Without reference to a correct eigenvector $v_1$, the specification of the eigenvalue $\lambda_1$ cannot be evaluated.}
+              \explanation[edited AND correct(ans_1) AND NOT[correct(ans)]]{The eigenvalue $\lambda_1$ is obtained by comparing the coordinates of an eigenvector, e.g. $v_1=\var{ev1}$, with the coordinates of its image $f(v_1)=\lambda_1 v_1 = \var{fev1}$. The quotient of the $x$-coordinates or the $y$-coordinates yields $\lambda_1= \var{ew1}$.}
+              }  
+        \end{answer}
+
+ \begin{answer}
+            \score{1}
+            \type{input.matrix}
+            \lang{de}{\text{\textbf{Antwort: } Zweiter Eigenvektor: $v_2 = $}}
+            \lang{en}{\text{\textbf{Answer: } Second eigenvector: $v_2 = $}}
+            \format{2}{1}
+            \matrixType{pmatrix}
+            \inputAsMatrix{}{antwort_ev2}
+      \checkMatrixForZero{(antwort_ev2[0]*EV1[1]-antwort_ev2[1]*EV1[0])*(antwort_ev2[0]*EV2[1]-antwort_ev2[1]*EV2[0]) + dirac(antwort_ev2[0]*antwort_ev1[1]-antwort_ev2[1]*antwort_ev1[0])}{-1}{1}{1}
+            \solution{EV2}
+            \lang{de}{
+              \explanation[NOT[edited]]{Geben Sie einen 2. Eigenvektor $v_2$ ein!}    
+              \explanation[equal( antwort_ev2, antwort_ev1) ]{Finden Sie einen von $v_1$ verschiedenen linear unabhängigen Eigenvektor!}
+              \explanation[equal( antwort_ev2[null]*antwort_ev1[eins]-antwort_ev2[eins]*antwort_ev1[null] , 0) AND NOT equal( antwort_ev2, antwort_ev1) ]{Finden Sie einen von $v_1$ linear unabhängigen Eigenvektor!}
+              \explanation[edited AND NOT [correct(ans)]]{Geben Sie einen korrekten und von $v_1$ linear unabhängigen Vektor $v_2$ an!}
+          \explanation[edited AND NOT [correct(ans)] AND NOT[equal(antwort_ev2[0]*antwort_ev1[1]-antwort_ev2[1]*antwort_ev1[0],0)] ]{
+Die Bedingung für einen Eigenvektor $v_2\neq 0$ ist $A\cdot v_2 = \lambda_2 v_2$ für einen Skalar $\lambda_2 \in \R$. Anschaulich bedeutet diese Bedingung, dass die beiden Vektoren $f(v_2)$ und $v_2$ zwar unterschiedliche Längen und Richtungen haben können, jedoch die gleiche Gerade in $\R^2$ festlegen. \\
+Wir finden also einen Eigenvektor dadurch, dass wir $u$ so verschieben, dass die zugehörige rote und grüne gestrichelte Gerade deckungsgleich werden. \\
+Eine mögliche Lösung ist $v_2= \var{EV2}$, aber auch jedes Vielfache davon ist ein Eigenvektor. }}
+            \lang{en}{
+              \explanation[NOT[edited]]{Enter a second eigenvector $v_2$!}    
+              \explanation[equal( antwort_ev2, antwort_ev1) ]{Find a linearly independent eigenvector that is different from $v_1$!}
+              \explanation[equal( antwort_ev2[null]*antwort_ev1[eins]-antwort_ev2[eins]*antwort_ev1[null] , 0) AND NOT equal( antwort_ev2, antwort_ev1) ]{Find an eigenvector that is linearly independent of $v_1$!}
+              \explanation[edited AND NOT [correct(ans)] AND attempt <=2]{Specify a correct vector $v_2$ that is linearly independent of $v_1$!}
+          \explanation[edited AND NOT [correct(ans)] AND NOT[equal(antwort_ev2[0]*antwort_ev1[1]-antwort_ev2[1]*antwort_ev1[0],0)] AND attempt >=3]{
+The condition for an eigenvector $v_2\neq 0$ is $A\cdot v_2 = \lambda_2 v_2$ for a scalar $\lambda_2 \in \R$. Visually, this condition means that the two vectors $f(v_2)$ and $v_2$ can have different lengths and directions, but they define the same straight line in $\R^2$. \\
+So we find an eigenvector by shifting $u$ so that the corresponding red and green dashed lines coincide. \\
+One possible solution is $v_2= \var{EV2}$, but any multiple of this is also an eigenvector.}}
+        \end{answer}
+
+         \begin{answer}
+            \score{1}
+            \type{input.function}
+            \lang{de}{\text{Eigenwert zum 2.  Eigenvektor: $\lambda_2 = $}}
+            \lang{en}{\text{Eigenvalue corresponding to the 2nd eigenvector: $\lambda_2 = $}}  
+             \inputAsFunction{}{antwort_ew2}
+      \checkFuncForZero[0.01]{
+      (   |antwort_ew2 - ew1| + |antwort_ev2[0]*EV1[1]-antwort_ev2[1]*EV1[0]| ) 
+      * ( |antwort_ew2 - ew2| + |antwort_ev2[0]*EV2[1]-antwort_ev2[1]*EV2[0]| ) 
+      + dirac(antwort_ew1-antwort_ew2)}{-1}{1}{1} % zwei Antwortmöglichkeiten, passend zu EV, verschieden von lambda_1 
+            \solution{ew2}
+            \lang{de}{
+              \explanation[ NOT[edited]]{Geben Sie einen Eigenwert zum Eigenvektor $v_2$ ein! }             
+              \explanation[equal(antwort_ew2, antwort_ew1)]{Finden Sie zwei unterschiedliche Eigenwerte $\lambda_1$ und $\lambda_2$!}
+              \explanation[edited AND NOT[correct(ans_3)]]{Ohne Bezug auf einen korrekten Eigenvektor $v_2$ ist die Angabe des Eigenwerts $\lambda_2$ nicht bewertbar.}
+              \explanation[edited AND correct(ans_3) AND NOT[correct(ans)] AND NOT[equal(antwort_ew2,antwort_ew1)]]{Den Eigenwert $\lambda_2$ erhalten wir durch Vergleich der Koordinaten eines Eigenvektors, z. B. $v_2=\var{ev2}$, mit den Koordinaten seines Bildes $f(v_2)=\lambda_2 v_2 = \var{fev2}$. Der Quotient der $x$-Koordinaten beziehungsweise der $y$-Koordinaten ergibt $\lambda_2=  \var{ew2}$.  }
+              }
+            \lang{en}{
+              \explanation[ NOT[edited]]{Enter an eigenvalue for eigenvector $v_2$! }             
+              \explanation[equal(antwort_ew2, antwort_ew1)]{Find two different eigenvalues $\lambda_1$ and $\lambda_2$!}
+              \explanation[edited AND NOT[correct(ans_3)]]{Without reference to a correct eigenvector $v_2$, the specification of the eigenvalue $\lambda_2$ cannot be evaluated.}
+              \explanation[edited AND correct(ans_3) AND NOT[correct(ans)] AND NOT[equal(antwort_ew2,antwort_ew1)]]{The eigenvalue $\lambda_2$ is obtained by comparing the coordinates of an eigenvector, e.g. $v_2=\var{ev2}$, with the coordinates of its image $f(v_2)=\lambda_2 v_2 = \var{fev2}$. The quotient of the $x$-coordinates or of the $y$-coordinates yields $\lambda_2=  \var{ew2}$.}
+              }  
+        \end{answer}      
+
+\end{question}
+\end{problem}
+ 
+\embedmathlet{gwtmathlet}
+
+\end{content}

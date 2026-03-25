@@ -1,0 +1,325 @@
+\documentclass{mumie.problem.gwtmathlet}
+\begin{metainfo}
+  \name{
+    \lang{de}{Visualisierung zum Gram-Schmidt Verfahren}
+    \lang{en}{The Gram-Schmidt process}
+  }
+  \begin{description}
+    \lang{en}{The Gram-Schmidt process}
+    \lang{de}{Die Anwendung des Gram-Schmidt-Verfahrens im $\R^2$ mit dem Standardskalarprodukt und der davon induzierten Norm}
+  \end{description}
+  \corrector{system/problem/GenericCorrector.meta.xml}
+  \begin{components}
+
+           \component{js_lib}{system/problem/GenericMathlet.meta.xml}{gwtmathlet}
+  \end{components}
+
+  \creategeneric
+\end{metainfo}
+
+\usepackage{mumie.genericproblem}
+
+\begin{content}
+\begin{block}[annotation]
+Copy of : /home/mumie/checkin/content/playground/Matthias_Gampert/art_Gram-Schmidt.src.tex
+\end{block}
+
+\title{
+  \lang{de}{Das Gram-Schmidt-Verfahren}
+  \lang{en}{The Gram-Schmidt process}
+  }
+
+\begin{visualizationwrapper}
+\begin{visualization}[false]{gram_schmidt2}
+
+\begin{variables}
+    \question{1}{x11}
+    \question{1}{x12}
+    \question{1}{x21}
+    \question{1}{x22}
+   
+    \point[editable]{x1}{x11,x12}
+    \point[editable]{x2}{x21,x22}
+    \vector{v1}{x1}
+    \vector{v2}{x2}
+
+    \number{absx}{sqrt(x1[x]^2+x1[y]^2)}
+    \number{z11}{x1[x]/absx}
+    \number{z12}{x1[y]/absx}
+    \point{z1}{z11,z12}
+    \vector{u1}{z1}
+
+    \number{scpr}{x1[x]*x2[x]+x1[y]*x2[y]}
+    \number{y21}{x2[x]-(scpr/absx^2)*x1[x]}
+    \number{y22}{x2[y]-(scpr/absx^2)*x1[y]}
+    \point{y2}{y21,y22}
+    \number{absy}{sqrt(y2[x]^2+y2[y]^2)}
+    \number{z21}{y2[x]/absy}
+    \number{z22}{y2[y]/absy}
+    \point{z2}{z21,z22}
+    \vector{u2}{z2}    
+  
+    \point{ursprung}{0,0}
+    \angle{alpha_0}{ursprung, z1, z2}
+    \number{winkel}{alpha_0-2*pi*theta(alpha_0-pi)}
+    \angle{alpha}{ursprung, z1, winkel, 1}
+
+    \checkbox{circToggle}{0}
+    \parametricFunction{f}{circToggle*cos(t), circToggle*sin(t), 0, 2*pi}
+\end{variables}
+
+    \color{v1,x1}{DARK_RED}
+    \color{v2,x2}{DARK_BLUE}
+    \color{u1,z1}{RED}
+    \color{u2,z2}{BLUE}
+    \color{alpha}{GREEN}
+    \color{f,circToggle}{BLACK}
+    \label{x1}{${v_1}$}
+    \label{x2}{${v_2}$}
+    \label{z1}{${u_1}$}
+    \label{z2}{${u_2}$}
+    \label{alpha}{${\alpha}$}
+\lang{de}{
+    \label{circToggle}{Anzeige des Einheitskreises}}
+\lang{en}{
+    \label{circToggle}{Display of the unit circle}}
+\style{x1,x2,z1,z2}{size:0}
+\style{f}{dash:2}
+
+\begin{canvas}
+     \plotSize{400,400}  
+     \plotLeft{-5}
+     \plotRight{5}
+     \plotTop{5}
+     \plotBottom{-5}
+     \plot[coordinateSystem,noMouseZooming,showPointCoords]{v1,v2,u1,u2,x1,x2,z1,z2,alpha,circToggle,f}
+     \snapToGrid{0.1,0.1}
+     \xAxis{$x$}
+     \yAxis{$y$}
+\end{canvas}
+
+\end{visualization}
+
+\begin{visualization}[false]{gram_schmidt3}
+  \begin{variables}
+    \question{3}{vv11}
+    \question{3}{vv12}
+    \question{3}{vv13}
+    \question{3}{vv21}
+    \question{3}{vv22}
+    \question{3}{vv23}
+    \question{3}{vv31}
+    \question{3}{vv32}
+    \question{3}{vv33}
+
+    \point[editable]{VV1}{vv11,vv12,vv13}
+    \point[editable]{VV2}{vv21,vv22,vv23}
+    \point[editable]{VV3}{vv31,vv32,vv33}
+    \vector[editable]{V1}{VV1}
+    \vector[editable]{V2}{VV2}
+    \vector[editable]{V3}{VV3}
+
+    \number{absV1}{sqrt(VV1[x]^2+VV1[y]^2+VV1[z]^2)}
+    \number{uu11}{VV1[x]/absV1}
+    \number{uu12}{VV1[y]/absV1}
+    \number{uu13}{VV1[z]/absV1}
+    \point{UU1}{uu11,uu12,uu13}
+    \vector{U1}{UU1}
+
+    \number[calculate]{scpr_u1v2}{UU1[x]*VV2[x]+UU1[y]*VV2[y]+UU1[z]*VV2[z]}
+    \number{uy21}{VV2[x]-scpr_u1v2*UU1[x]}
+    \number{uy22}{VV2[y]-scpr_u1v2*UU1[y]}
+    \number{uy23}{VV2[z]-scpr_u1v2*UU1[z]}
+    \number[calculate]{absUY2}{sqrt(uy21^2+uy22^2+uy23^2)}
+    \number{uu21}{uy21/absUY2}
+    \number{uu22}{uy22/absUY2}
+    \number{uu23}{uy23/absUY2}
+    \point{UU2}{uu21,uu22,uu23}
+    \vector{U2}{UU2}
+
+    \number[calculate]{scpr_u1v3}{UU1[x]*VV3[x]+UU1[y]*VV3[y]+UU1[z]*VV3[z]}
+    \number[calculate]{scpr_u2v3}{UU2[x]*VV3[x]+UU2[y]*VV3[y]+UU2[z]*VV3[z]}
+    \number{uy31}{VV3[x]-scpr_u1v3*UU1[x]-scpr_u2v3*UU2[x]}
+    \number{uy32}{VV3[y]-scpr_u1v3*UU1[y]-scpr_u2v3*UU2[y]}
+    \number{uy33}{VV3[z]-scpr_u1v3*UU1[z]-scpr_u2v3*UU2[z]}
+    \number[calculate]{absUY3}{sqrt(uy31^2+uy32^2+uy33^2)}
+    \number{uu31}{uy31/absUY3}
+    \number{uu32}{uy32/absUY3}
+    \number{uu33}{uy33/absUY3}
+    \point{UU3}{uu31,uu32,uu33}
+    \vector{U3}{UU3}
+
+    \point{Xax_}{4,0,0}
+    \vector{Xax}{Xax_}
+    \point{Yax_}{0,4,0}
+    \vector{Yax}{Yax_}
+    \point{Zax_}{0,0,4}
+    \vector{Zax}{Zax_}
+  \end{variables}
+
+\color{VV1,V1}{DARK_RED}
+\color{UU1,U1}{RED}
+\color{VV2,V2}{DARK_GREEN}
+\color{UU2,U2}{GREEN}
+\color{VV3,V3}{DARK_BLUE}
+\color{UU3,U3}{BLUE}
+\label{VV1}{${v_1}$}
+\label{VV2}{${v_2}$}
+\label{VV3}{${v_3}$}
+\label{UU1}{${u_1}$}
+\label{UU2}{${u_2}$}
+\label{UU3}{${u_3}$}
+\color{Xax,Yax,Zax}{BLACK}
+\style{U1,U2,U3}{strokeWidth:2}
+
+  \begin{canvasXYZ}
+            \plotSize{300,300}
+            \plotX{-4,4}
+            \plotY{-4,4}
+            \plotZ{-4,4}
+            \plot[showPointCoords]{V1,U1,V2,U2,V3,U3,VV1,UU1,VV2,UU2,VV3,UU3,Xax,Yax,Zax}
+            \xAxis{$x$}
+            \yAxis{$y$}
+            \zAxis{$z$}
+          \end{canvasXYZ}
+
+  \lang{de}{
+  \text{Aktuell zu sehen sind $\textcolor{DARKRED}{v_1=\var{V1}}$, $\textcolor{DARKGREEN}{v_2=\var{V2}}$ und $\textcolor{DARKBLUE}{v_3=\var{V3}}$. \\
+        Die daraus resultierende Orthonormalbasis ist \\
+        $\left\{\textcolor{red}{u_1=\var{U1}},\textcolor{green}{u_2=\var{U2}},\textcolor{blue}{u_3=\var{U3}}\right\}$.}}
+  \lang{en}{
+  \text{Currently visible are $\textcolor{DARKRED}{v_1=\var{V1}}$, $\textcolor{DARKGREEN}{v_2=\var{V2}}$ and $\textcolor{DARKBLUE}{v_3=\var{V3}}$. \\
+        The resulting orthonormal basis is \\
+        $\left\{\textcolor{red}{u_1=\var{U1}},\textcolor{green}{u_2=\var{U2}},\textcolor{blue}{u_3=\var{U3}}\right\}$.}}
+\end{visualization}
+\end{visualizationwrapper}
+
+\begin{problem}
+
+  \lang{de}{\text{Wir betrachten den $\R^2$ mit dem Standardskalarprodukt und der davon induzierten Norm.\\
+                  In der folgenden interaktiven Visualisierung wird zu gegebenen Vektoren $v_1,v_2$ mithilfe des Gram-Schmidt Verfahrens eine Orthonormalbasis $B=\left\{u_1,u_2\right\}$ des $\R^2$ bestimmt (sofern das möglich ist).}}
+  \lang{en}{\text{We consider $\R^2$ with the dot product and the norm induced by it.\\
+                  In the following interactive visualization, an orthonormal basis $B=\left\{u_1,u_2\right\}$ of $\R^2$ is determined for given vectors $v_1,v_2$ using the Gram-Schmidt process (if possible).}}
+
+  \begin{question}
+    \begin{variables}
+      \randint{x11}{-4}{4}
+      \randint[Z]{x12}{-4}{4}
+      \randint[Z]{x21}{-4}{4}
+      \randint{x22_pre}{-4}{4}
+      \randadjustIf{x22_pre}{x11*x22_pre-x12*x21=0}
+      \function{x22}{x22_pre}
+    \end{variables}
+    
+  \lang{de}{\text{Bewegen Sie zuerst den Vektor $\textcolor{DARKRED}{v_1}$ und beobachten Sie, wie sich $\textcolor{red}{u_1}$ und $\textcolor{blue}{u_2}$ dabei verändern. \\
+                  Bewegen Sie nun $\textcolor{DARKBLUE}{v_2}$ und beobachten Sie erneut die Veränderungen. \\
+                  \visualization{gram_schmidt2} }}
+  \lang{en}{\text{First, move the vector $\textcolor{DARKRED}{v_1}$ and observe how $\textcolor{red}{u_1}$ and $\textcolor{blue}{u_2}$ change. \\
+                  Now move $\textcolor{DARKBLUE}{v_2}$ and observe the changes again. \\
+                  \visualization{gram_schmidt2} }}
+  \end{question}
+
+  \begin{question}
+
+  \lang{de}{\text{Nutzen Sie die interaktive Visualisierung, um zu bestimmen, bei welchen Gegebenheiten das Gram-Schmidt Verfahren nicht funktioniert?}}
+  \lang{en}{\text{Under what circumstances does the Gram-Schmidt process not work? Use the interactive visualization above.}}
+  \type{mc.multiple}
+  \permutechoices[5]{1}{7}
+    \begin{choice}
+      \lang{de}{\text{Falls $v_1=0$.}}
+      \lang{en}{\text{If $v_1=0$.}}
+      \solution{true}
+    \end{choice}
+
+    \begin{choice}
+      \lang{de}{\text{Falls $v_2=0$.}}
+      \lang{en}{\text{If $v_2=0$.}}
+      \solution{true}
+    \end{choice}
+
+    \begin{choice}
+      \lang{de}{\text{Falls die Vektoren $v_1$ und $v_2$ linear abhängig sind.}}
+      \lang{en}{\text{If the vectors $v_1$ and $v_2$ are linearly dependent.}}
+      \solution{true}
+    \end{choice}
+
+    \begin{choice}
+      \lang{de}{\text{Falls $v_1$ und $v_2$ linear unabhängig sind aber $v_2$ schon Länge 1 hat.}}
+      \lang{en}{\text{If $v_1$ and $v_2$ are linearly independent but $v_2$ already has length 1.}}
+      \solution{false}
+    \end{choice}
+
+    \begin{choice}
+      \lang{de}{\text{Falls $\left\{v_1,v_2\right\}$ bereits eine Orthogonalbasis bilden.}}
+      \lang{en}{\text{If $\left\{v_1,v_2\right\}$ already form an orthogonal basis.}}
+      \solution{false}
+    \end{choice}
+
+    \begin{choice}
+      \lang{de}{\text{Falls der Öffnungswinkel zwischen $v_1$ und $v_2$ sehr klein wird.}}
+      \lang{en}{\text{If the opening angle between $v_1$ and $v_2$ becomes very small.}}
+      \solution{false}
+    \end{choice}
+
+    \begin{choice}
+      \lang{de}{\text{Falls $v_1$ und $v_2$ nicht orthogonal zueinander und auch nicht linear abhängig sind.}}
+      \lang{en}{\text{If $v_1$ and $v_2$ are not orthogonal to each other and are also not linearly dependent.}}
+      \solution{false}
+    \end{choice}
+
+\lang{de}{
+    \explanation[NOT equalChoice(0000000) AND equalChoice(0??????)]{Ist $v_1=0$, ist $\left\{0,v_2\right\}$ keine Basis des $\R^2$. \\
+      Das ist aber Voraussetzung für das Gram-Schmidt Verfahren.}
+    \explanation[NOT equalChoice(0000000) AND equalChoice(?0?????)]{Ist $v_2=0$, ist $\left\{v_1,0\right\}$ keine Basis des $\R^2$. \\
+      Das ist aber Voraussetzung für das Gram-Schmidt Verfahren.}
+    \explanation[equalChoice(000????) AND attempt >=4]{Damit das Gram-Schmidt Verfahren angewandt werden kann, muss $\left\{v_1,v_2\right\}$ eine Basis des $\R^2$ sein. \\
+      Das heißt $v_1$ und $v_2$ müssen linear unabhängig sein.\\
+      Das geht insbesondere nicht, falls einer der beiden Vektoren der Nullvektor ist.}
+    \explanation[equalChoice(???1???)]{Dadurch, dass $v_1$ und $v_2$ linear unabhängig sind funktioniert das Verfahren unabhängig von der Länge von $v_2$.}
+    \explanation[equalChoice(????1??)]{Bilden $v_1$ und $v_2$ bereits eine Orthogonalbasis, so werden sie durch das Gram-Schmidt Verfahren noch normiert. Das Verfahren funktioniert aber.}
+    \explanation[equalChoice(?????1?)]{So lange der Winkel $\alpha\in(0,\pi)$ ist, bilden $v_1$ und $v_2$ eine Basis des $\R^2$. Das Verfahren funktioniert also auch wenn der Öffnungswinkel sehr klein ist.}
+    \explanation[equalChoice(??????1)]{Falls $v_1$ und $v_2$ nicht orthogonal zueinander und auch nicht linear abhängig sind, bedeutet das, dass $v_1$ und $v_2$ zwei linear unabhängige Vektoren im $\R^2$ sind. Also bilden sie eine Basis und das Gram-Schmidt Verfahren funktioniert.}}
+\lang{en}{
+    \explanation[NOT equalChoice(0000000) AND equalChoice(0??????)]{If $v_1=0$, then $\left\{0,v_2\right\}$ is not a basis for $\R^2$. \\
+      However, this is a precondition for the Gram-Schmidt process.}
+    \explanation[NOT equalChoice(0000000) AND equalChoice(?0?????)]{If $v_2=0$, then $\left\{v_1,0\right\}$ is not a basis for $\R^2$. \\
+      However, this is a precondition for the Gram-Schmidt process.}
+    \explanation[equalChoice(000????) AND attempt >=4]{In order for the Gram-Schmidt process to be applied, $\left\{v_1,v_2\right\}$ must be a basis of $\R^2$. \\
+      This means that $v_1$ and $v_2$ must be linearly independent.\\
+      This is not possible if one of the two vectors is the zero vector.}
+    \explanation[equalChoice(???1???)]{Since $v_1$ and $v_2$ are linearly independent, the process works regardless of the length of $v_2$.}
+    \explanation[equalChoice(????1??)]{If $v_1$ and $v_2$ already form an orthogonal basis, they are normalized using the Gram-Schmidt process. However, the process works.}
+    \explanation[equalChoice(?????1?)]{As long as the angle $\alpha\in(0,\pi)$, $v_1$ and $v_2$ form a basis of $\R^2$. The process therefore also works when the opening angle is very small.}
+    \explanation[equalChoice(??????1)]{If $v_1$ and $v_2$ are not orthogonal to each other and are also not linearly dependent, this means that $v_1$ and $v_2$ are two linearly independent vectors in $\R^2$. They therefore form a basis and the Gram-Schmidt process works.}}    
+  \end{question}
+  
+  \begin{question}
+    \begin{variables}
+      \randint[Z]{vv11}{-4}{4}
+      \randint[Z]{vv12}{-4}{4}
+      \randint[Z]{vv13}{-4}{4}
+      \randint[Z]{vv21}{-4}{4}
+      \randint[Z]{vv22}{-4}{4}
+      \randint[Z]{vv23}{-4}{4}
+      \randint[Z]{vv31}{-4}{4}
+      \randint[Z]{vv32}{-4}{4}
+      \randint[Z]{vv33}{-4}{4}
+      \randadjustIf{vv33}{vv11*vv22*vv33+vv12*vv23*vv31+vv13*vv21*vv22-vv13*vv22*vv31-vv11*vv23*vv32-vv12*vv21*vv33=0}
+    \end{variables}
+
+    \lang{de}{
+    \text{Abschließend können Sie in der folgenden interaktiven Graphik das Gram-Schmidt Verfahren im $\R^3$ beobachten. \\
+          Auch hier können Sie die Vektoren $\textcolor{DARKRED}{v_1},\textcolor{DARKGREEN}{v_2},\textcolor{DARKBLUE}{v_3}$ im Raum verschieben. Alternativ können Sie sie unterhalb der Visualisierung anpassen und die Veränderungen der Orthonormalbasis beobachten. \\
+          Hier kann es fälschlicherweise so aussehen, als ob die Vektoren $u_i$ gar nicht orthogonal zueinander sind. Um die Orthogonalität doch beobachten zu können, verändern Sie die Ansicht mittels der Slider \textit{az,el} und \textit{bank}. \\
+          \visualization{gram_schmidt3}}}
+    \lang{en}{
+    \text{Finally, you can observe the Gram-Schmidt process in $\R^3$ in the following interactive graphic. \\
+          Here, too, you can move the vectors $\textcolor{DARKRED}{v_1},\textcolor{DARKGREEN}{v_2},\textcolor{DARKBLUE}{v_3}$ in space. Alternatively, you can adjust them below the visualization and observe the changes in the orthonormal basis. \\
+          Here, it may appear incorrectly as if the vectors $u_i$ are not orthogonal to each other. To observe the orthogonality, change the view using the sliders \textit{az,el} and \textit{bank}. \\
+          \visualization{gram_schmidt3}}}
+  \end{question}
+  
+\end{problem}
+
+\embedmathlet{gwtmathlet}
+\end{content}

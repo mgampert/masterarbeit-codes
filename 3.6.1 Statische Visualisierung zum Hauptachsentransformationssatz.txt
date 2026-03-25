@@ -1,0 +1,178 @@
+\documentclass{mumie.problem.gwtmathlet}
+\begin{metainfo}
+  \name{
+    \lang{de}{Visualisierung zum Hauptachsentransformationssatz}
+    \lang{en}{Visualization for the Principle axis Theorem}
+  }
+  \begin{description}
+    \lang{en}{...}
+    \lang{de}{...}
+  \end{description}
+  \corrector{system/problem/GenericCorrector.meta.xml}
+  \begin{components}
+
+           \component{js_lib}{system/problem/GenericMathlet.meta.xml}{gwtmathlet}
+  \end{components}
+  \creategeneric
+\end{metainfo}
+
+\usepackage{mumie.genericproblem}
+
+\begin{content}
+\begin{block}[annotation]
+Copy of : /home/mumie/checkin/content/playground/Matthias_Gampert/art_Hauptachsentransformation.src.tex
+\end{block}
+
+
+\title{
+  \lang{de}{Der Hauptachsentransformationssatz}
+  \lang{en}{The Principle axis theorem}}
+
+\begin{visualizationwrapper}
+\begin{visualization}[false]{axis_transformation}
+
+\begin{variables}
+  \question{1}{a}
+  \question{1}{b}
+  \question{1}{c}
+  \question{1}{lambda1}
+  \question{1}{lambda2}
+
+  \point{ursprung}{0,0}
+  \number[calculate]{v11_pre}{-b}
+  \number[calculate]{v21_pre}{a-lambda1}
+  \number[calculate]{abs_v1}{sqrt(v11_pre^2+v21_pre^2)}
+  \number[calculate]{v11}{v11_pre/abs_v1}
+  \number[calculate]{v21}{v21_pre/abs_v1}
+  \number[calculate]{v22_pre}{lambda2-a}
+  \number[calculate]{abs_v2}{sqrt(v11_pre^2+v22_pre^2)}
+  \number[calculate]{v12}{-v11_pre/abs_v2}
+  \number[calculate]{v22}{v22_pre/abs_v2}
+  \point{q1}{v11,v21}
+  \vector{u1}{q1}
+  \point{q2}{v12,v22}
+  \vector{u2}{q2}
+  \number[calculate]{p11}{v11/sqrt(lambda1)}
+  \number[calculate]{p21}{v21/sqrt(lambda1)}
+  \number[calculate]{p12}{v12/sqrt(lambda2)}
+  \number[calculate]{p22}{v22/sqrt(lambda2)}
+  \point{p1}{p11,p21}
+  \number[calculate]{label_p11}{p11*0.8}
+  \number[calculate]{label_p21}{p21*0.8}
+  \point{label_p1}{label_p11,label_p21}
+  \segment{v1}{ursprung,p1}
+  \line{eig1}{ursprung,p1}
+  \point{p2}{p12,p22}
+  \segment{v2}{ursprung,p2}
+  \line{eig2}{ursprung,p2}
+
+  \parametricFunction{q_A}{v11/sqrt(lambda1)*cos(t)+v12/sqrt(lambda2)*sin(t), v21/sqrt(lambda1)*cos(t)+v22/sqrt(lambda2)*sin(t), 0, 2*pi}
+\end{variables}
+
+  \color{p1,label_p1,v1,eig1}{RED}
+  \label{label_p1}{${l_1}$}
+  \label{v2}{${l_2}$}
+  \label{eig1}{${E_A(\lambda_1)}$}
+  \color{p2,v2,eig2}{BLUE}
+  \label{eig2}{${E_A(\lambda_2)}$}
+  \color{q_A}{BLACK}
+  \label{q_A}{${q_A(x)=1}$}
+  \style{p1,p2}{size:1}
+  \style{eig1,eig2}{dash:2}
+  \style{label_p1,p1,p2}{size:0}
+  
+\begin{canvas}
+     \plotSize{350,350}  
+     \plotLeft{-2}
+     \plotRight{2}
+     \plotTop{2}
+     \plotBottom{-2}
+     \plot[coordinateSystem,showPointCoords]{label_p1,v1,v2,q_A,eig1,eig2,p1,p2}
+\end{canvas}
+
+\lang{de}{
+\text{$A$ hat die Eigenwerte $\textcolor{red}{\lambda_1}=\var{lambda1}$ sowie $\textcolor{blue}{\lambda_2}=\var{lambda2}$. \\
+      Die zugehörigen Eigenräume sind definiert über $E_A(\lambda_1)=\left\{t\cdot\var{u1};t\in\R\right\}$ und $E_A(\lambda_2)=\left\{t\cdot\var{u2};t\in\R\right\}$.}}
+\lang{en}{
+\text{$A$ has the eigenvalues $\textcolor{red}{\lambda_1}=\var{lambda1}$ and $\textcolor{blue}{\lambda_2}=\var{lambda2}$. \\
+      The corresponding eigenspaces are given by $E_A(\lambda_1)=\left\{t\cdot\var{u1};t\in\R\right\}$ and $E_A(\lambda_2)=\left\{t\cdot\var{u2};t\in\R\right\}$.}}
+
+\end{visualization}
+\end{visualizationwrapper}
+
+\begin{problem}
+\begin{question}
+\begin{variables}
+  \randint{a_pre}{10}{50}
+  \randint[Z]{b_pre}{-50}{50}
+  \randint{c_pre}{10}{50}
+  \randadjustIf{c_pre}{a_pre=c_pre}
+  \randadjustIf{a_pre,b_pre}{a_pre*c_pre-b_pre^2<=0}
+  \function[calculate]{a}{a_pre/10}
+  \function[calculate]{b}{b_pre/10}
+  \function[calculate]{c}{c_pre/10}
+  \pmatrix{aa}{a & b\\b & c}
+  \function[calculate]{lambda1}{(a+c)/2+sqrt(((a-c)/2)^2+b^2)}
+  \function[calculate,2]{l_1}{1/sqrt(lambda1)}
+  \function[calculate]{lambda2}{(a+c)/2-sqrt(((a-c)/2)^2+b^2)}
+  \function[calculate,2]{l_2}{1/sqrt(lambda2)}
+\end{variables}
+
+\lang{de}{
+\text{Gegeben ist die symmetrische Matrix $A=\var{aa}$ sowie die dazugehörige Bilinearform $b_A:\R^2\times\R^2\to\R$ mit $b_A(x,y)=x^T\cdot A\cdot y$, die ein Skalarprodukt auf $\R^2$ definiert. \\
+      Wir betrachten die daraus induzierte quadratische Form $q_A:\R^2\to\R$ mit $q_A(x)=b_A(x,x)$ sowie alle Punkte in $\R^2$ mit $q_A(x)=1$. Das heißt wir betrachten alle Punkte, die bezüglich der zu diesem Skalarprodukt gehörigen Norm, Länge $1$ haben. \\
+      
+      In der folgenden Visualisierung sind alle Punkte, für die die quadratische Form $\textcolor{black}{q_A(x)=1}$ ist, sowie die beiden Eigenräume $\textcolor{red}{E_A(\lambda_1)}, \textcolor{blue}{E_A(\lambda_2)}$ zu den jeweiligen Eigenwerten dargestellt. \\
+      \visualization{axis_transformation}
+      Bestimmen Sie die Längen der Hauptachsen der Ellipse im $\R^2$ unter Verwendung der Standardnorm. \\
+      Hinweis: Die Koordinaten der Punkte auf den Halbachsen werden angezeigt, sobald der Mauscursor über ihnen positioniert wird. \\
+      Es genügt die Angabe auf 2 Nachkommastellen gerundet.}}
+\lang{en}{
+\text{Given is the symmetric matrix $A=\var{aa}$ and the corresponding bilinear form $b_A:\R^2\times\R^2\to\R$ with $b_A(x,y)=x^T\cdot A\cdot y$, which defines a scalar product on $\R^2$. \\
+      We consider the induced quadratic form $q_A:\R^2\to\R$ with $q_A(x)=b_A(x,x)$ and all points in $\R^2$ with $q_A(x)=1$. This means we consider all points that have length $1$ with respect to the norm associated with this scalar product. \\
+      
+      The following visualization shows all points for which the quadratic form is $\textcolor{black}{q_A(x)=1}$ as well as the two eigenspaces $\textcolor{red}{E_A(\lambda_1)}, \textcolor{blue}{E_A(\lambda_2)}$ for the respective eigenvalues. \\
+      \visualization{axis_transformation}
+      Determine the lengths of the principle axes of the ellipse in $\R^2$ using the standard norm. \\
+      Note: The coordinates of the points on the principle axes are displayed when the mouse cursor is positioned over them. \\
+      It is sufficient to round the values to 2 decimal places.}}
+
+\begin{answer}
+  \lang{de}{\text{Die Länge der ersten Hauptachse beträgt $\textcolor{red}{l_1}=$}}
+  \lang{en}{\text{The length of the first main axis is $\textcolor{red}{l_1}=$}}
+  \type{input.number}
+  \solution{l_1}
+  \lang{de}{
+  \explanation[NOT edited]{Sie haben keinen Wert für $l_1$ eingegeben.}
+  \explanation[equal(ans,l_2)]{Sie haben die Länge von $l_2$ berechnet.}
+  \explanation[NOT equal(ans,l_1) AND edited AND attempt <=2]{Die Standardnorm für einen Punkt $p=(x,y)\in\R^2$ ist $\norm{p}=\sqrt{x^2+y^2}$.}
+  \explanation[NOT equal(ans,l_1) AND edited AND attempt>=3]{Man erhält für die Länge $l_1=\var{l_1}$. Das entspricht gerade $1/\sqrt{\lambda_1}$.}}
+  \lang{en}{
+  \explanation[NOT edited]{You have not entered a value for $l_1$.}
+  \explanation[equal(ans,l_2)]{You have calculated the length of $_2$.}
+  \explanation[NOT equal(ans,l_1) AND edited AND attempt <=2]{The standard norm for a point $p=(x,y)\in\R^2$ is $\norm{p}=\sqrt{x^2+y^2}$.}
+  \explanation[NOT equal(ans,l_1) AND edited AND attempt>=3]{The length is $l_1=\var{l_1}$. This corresponds to $1/\sqrt{\lambda_1}$.}}
+\end{answer}
+
+\begin{answer}
+  \lang{de}{\text{Die Länge der zweiten Hauptachse beträgt $\textcolor{blue}{l_2}=$}}
+  \lang{en}{\text{The length of the second main axis is $\textcolor{blue}{l_2}=$}}
+  \type{input.number}
+  \solution{l_2}
+  \lang{de}{
+  \explanation[NOT edited]{Sie haben keinen Wert für $l_2$ eingegeben.}
+  \explanation[equal(ans,l_1)]{Sie haben die Länge von $l_1$ berechnet.}
+  \explanation[NOT equal(ans,l_2) AND edited AND attempt <=2]{Die Standardnorm für einen Punkt $p=(x,y)\in\R^2$ ist $\norm{p}=\sqrt{x^2+y^2}$.}
+  \explanation[NOT equal(ans,l_2) AND edited AND attempt>=3]{Man erhält für die Länge $l_2=\var{l_2}$. Das entspricht gerade $1/\sqrt{\lambda_2}$.}}
+  \lang{en}{
+  \explanation[NOT edited]{You have not entered a value for $l_2$.}
+  \explanation[equal(ans,l_1)]{You have calculated the length of $l_1$.}
+  \explanation[NOT equal(ans,l_2) AND edited AND attempt <=2]{The standard norm for a point $p=(x,y)\in\R^2$ is $\norm{p}=\sqrt{x^2+y^2}$.}
+  \explanation[NOT equal(ans,l_2) AND edited AND attempt>=3]{The length is $l_2=\var{l_2}$. This corresponds to $1/\sqrt{\lambda_2}$.}}
+\end{answer}
+
+\end{question}
+\end{problem}
+
+\embedmathlet{gwtmathlet}
+\end{content}

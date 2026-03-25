@@ -1,0 +1,418 @@
+\documentclass{mumie.problem.gwtmathlet}
+\begin{metainfo}
+  \name{
+    \lang{de}{Aufgabe und Visualisierung zu Extrema unter  
+              Nebenbedingungen}
+    \lang{en}{Task and visualization for extrem values 
+              unter constraints}
+  }
+  \begin{description}
+    \lang{en}{...}
+    \lang{de}{...}
+  \end{description}
+  \corrector{system/problem/GenericCorrector.meta.xml}
+  \begin{components}
+
+           \component{js_lib}{system/problem/GenericMathlet.meta.xml}{gwtmathlet}
+  \end{components} 
+
+  \creategeneric
+\end{metainfo}
+
+\usepackage{mumie.genericproblem}
+
+\begin{content}
+\begin{block}[annotation]
+Copy of : /home/mumie/checkin/content/playground/Matthias_Gampert/art_Extrema_NB.src.tex
+\end{block}
+
+\title{Extrema unter Nebenbedingungen}
+
+\begin{visualizationwrapper}
+\begin{visualization}[false]{extr_1}
+
+  \begin{variables}
+    \question{1}{a}
+    \question{1}{f}
+    \question{1}{f_02}
+
+    \parametricFunction{circ}{cos(t), sin(t), 0, 2*pi}
+    \pointOnCurve{p}{circ,0}
+    \point{p3}{p[x],p[y],0}
+    \curve{circ3}{cos(t), sin(t), 0, 0, 2*pi}
+    \point{pcirc}{p[x], p[y], a*p[x]^2+p[y]^2-p[y]}
+    \segment{proj_p}{var(pcirc),var(p3)}
+    \curve{fcirc}{cos(t), sin(t), (sin(t))^2-sin(t)+a*(cos(t))^2, 0, 2*pi}
+
+    \point{label_f}{0,2,f_02}
+  \end{variables}
+
+\color{pcirc,p,p3,proj_p}{red}
+\color{circ,circ3}{green}
+\color{f,label_f}{LIGHT_BLUE}
+\color{fcirc}{blue}
+\label{label_f}{${G_f}$}
+\label{p,p3}{${P}$}
+\label{pcirc}{${(P,f(x,y))}$}
+\style{proj_p}{dash:2}
+\style{label_f}{size:0}
+
+  \begin{canvasRow}
+        \begin{canvasXYZ}
+            \plotSize{300,300}
+            \plotX{-3,3}
+            \plotY{-3,3}
+            \plotZ{-3,3}
+            \plot[coordinateSystem,showPointCoords]{f,circ3,p3,fcirc,pcirc,proj_p,label_f}
+            \xAxis{$x$}
+            \yAxis{$y$}
+            \zAxis{$z$}
+          \end{canvasXYZ}
+ 
+          \begin{canvas}
+            \plotSize{300,300}
+            \plotLeft{-2}
+            \plotRight{2}
+            \plotTop{2}
+            \plotBottom{-2}
+            \plot[coordinateSystem,showPointCoords,noMouseZooming]{circ,p}
+            \xAxis{$x$}
+            \yAxis{$y$}
+            \snapToGrid{0.01,0.01}
+        \end{canvas}
+    \end{canvasRow}
+  
+\end{visualization}
+
+\begin{visualization}[false]{extr_2}
+  \begin{variables}
+    \question{2}{a}
+    \question{2}{b}
+    \question{2}{r1}
+    \question{2}{r2}
+    \question{2}{f}
+    \question{2}{f_03}
+
+    \parametricFunction{g}{r1*cos(t), r2*sin(t), 0, 2*pi}
+    \pointOnCurve{p}{g,0}
+    \point{p3}{p[x],p[y],0}
+    \curve{g3}{r1*cos(t), r2*sin(t), 0, 0, 2*pi}
+    \point{pg}{p[x], p[y], a*p[x]^2/r1^2+b*p[y]^2/r2^2}
+    \segment{proj_p}{var(pg),var(p3)}
+    \curve{fg}{r1*cos(t), r2*sin(t), a*cos(t)^2+b*sin(t)^2, 0, 2*pi}
+
+    \point{label_f}{0,3,f_03}
+  \end{variables}
+
+\color{pg,p,p3,proj_p}{red}
+\color{g,g3}{green}
+\color{f,label_f}{LIGHT_BLUE}
+\color{fg}{blue}
+\label{label_f}{${G_f}$}
+\label{p,p3}{${P}$}
+\label{pg}{${(P,f(x,y))}$}
+\style{proj_p}{dash:2}
+\style{label_f}{size:0}
+
+  \begin{canvasRow}  
+        \begin{canvasXYZ}
+            \plotSize{300,300}
+            \plotX{-3,3}
+            \plotY{-3,3}
+            \plotZ{-3,3}
+            \plot[coordinateSystem,showPointCoords]{f,g3,p3,fg,pg,proj_p,label_f}
+            \xAxis{$x$}
+            \yAxis{$y$}
+            \zAxis{$z$}
+          \end{canvasXYZ}
+ 
+          \begin{canvas}
+            \plotSize{300,300}
+            \plotLeft{-3.2}
+            \plotRight{3.2}
+            \plotTop{3.2}
+            \plotBottom{-3.2}
+            \plot[coordinateSystem,showPointCoords,noMouseZooming]{g,p}
+            \xAxis{$x$}
+            \yAxis{$y$}
+            \snapToGrid{0.01,0.01}
+        \end{canvas}
+    \end{canvasRow}
+\end{visualization}
+\end{visualizationwrapper}
+
+\begin{problem}
+\randomquestionpool{1}{2}
+\chooseRandomPools{1}
+\begin{question}
+\begin{variables}
+  \randint[Z]{a_pre}{20}{50}
+  \randint[Z]{sig}{-1}{1}
+  \function[calculate,2]{a}{sig*a_pre/10}
+  \function{f}{a*x^2+y^2-y}
+  \function[calculate,2]{y_sol}{1/(2*(1-a))}
+  \function[calculate,2]{x_sol}{sqrt(1-y_sol^2)}
+  \matrix{pre_sol1}{0 \\ 1}
+  \matrix{pre_sol2}{0 \\ -1}
+  \matrix[calculate,2]{pre_sol3}{x_sol \\ y_sol}
+  \matrix[calculate,2]{pre_sol4}{-x_sol \\ y_sol}
+
+  \begin{switch}
+    \begin{case}{a<0}
+    \matrix{sol1}{pre_sol1}
+    \matrix{sol2}{pre_sol2}
+    \matrix{sol3}{pre_sol3}
+    \matrix{sol4}{pre_sol4}
+    \end{case}
+    \begin{case}{a>0}
+    \matrix{sol1}{pre_sol3}
+    \matrix{sol2}{pre_sol4}
+    \matrix{sol3}{pre_sol1}
+    \matrix{sol4}{pre_sol2}
+    \end{case}
+    \begin{default}
+    \matrix{sol1}{pre_sol1}
+    \matrix{sol2}{pre_sol2}
+    \matrix{sol3}{pre_sol3}
+    \matrix{sol4}{pre_sol4}
+    \end{default}
+  \end{switch}  
+
+    \number{zero}{0}
+    \number{two}{2}
+    \substitute[normalize]{f_0y}{f}{x}{zero}
+    \substitute[normalize]{f_02}{f_0y}{y}{two}
+\end{variables}
+
+\lang{de}{
+\text{Gegeben sind die Funktionen $f,g:\R^2\to\R$ mit $f(x,y)=\var{f}$ und $g(x,y)=x^2+y^2-1$. \\
+      Außerdem betrachten wir den Einheitskreis $\mathbb{S}^1=\{(x,y)\in\R^2:g(x,y)=0\}$. \\
+      Bestimmen Sie die Extrema von $f$ unter der Nebenbedingung $g(x,y)=0$ graphisch. Verwenden Sie dafür die folgende interaktive Visualisierung. \\
+      Dabei können Sie in der rechten 2-D-Abbildung den Punkt $\textcolor{red}{P}$ auf dem Einheitskreis verschieben. In der 3-D-Abbildung links sehen sie ebenfalls den zweidimensionalen Einheitskreis in \textcolor{green}{grün}. \\
+      In \textcolor{LIGHT_BLUE}{hellblau} sehen Sie den Graphen der Funktion $f$. Außerdem wird das Bild des Einheitskreises unter $f$ in \textcolor{blue}{blau} dargestellt. \\
+      \visualization{extr_1}
+      Geben Sie die Koordinaten der Maxima und Minima an. Runden Sie auf 2 Nachkommastellen.}}
+\lang{en}{
+\text{Given are the functions $f,g:\R^2\to\R$ with $f(x,y)=\var{f}$ and $g(x,y)=x^2+y^2-1$. \\
+      We also consider the unit circle $\mathbb{S}^1=\{(x,y)\in\R^2:g(x,y)=0\}$. \\
+      Determine graphically the extrema of $f$ under the constraint $g(x,y)=0$. For that use the interactive visualizations below. \\
+      You can move point $\textcolor{red}{P}$ on the unit circle in the 2-D illustration on the right. In the 3-D illustration on the left, you can also see the two-dimensional unit circle in \textcolor{green}{green}. \\
+      In \textcolor{LIGHT_BLUE}{light blue}, you can see the graph of the function $f$. In addition, the image of the unit circle of $f$ is shown in \textcolor{blue}{blue}. \\
+      \visualization{extr_1}
+      Enter the coordinates of the maxima and minima. Round to 2 decimal places.}}
+      
+  \begin{answer}
+    \lang{de}{\text{Die Koordinaten einer ersten Maximumstelle sind gegeben durch}}
+    \lang{en}{\text{The coordinates of a first maximum point are given by}}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{1}
+    \inputAsMatrix{}{ans1}
+    \checkFuncForZero[0.05]{dirac(ans1[0]+ans1[1]-sol1[0]-sol1[1])+dirac(ans1[0]+ans1[1]-sol2[0]-sol2[1])-1}{-1}{1}{1}
+    \solution{sol1}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben keine erste Maximumstelle angegeben.}
+      \explanation[edited AND NOT correct(ans1) AND attempt <=2]{Bewegen Sie den Punkt $P$ in der rechten Graphik so, dass der Bildpunkt von $f$ auf einer lokalen Maximumstelle der Nebenbedingung liegt.}
+      \explanation[edited AND NOT correct(ans1) AND attempt >=3]{Bewegt man den Punkt $P$ so, dass der zugehörige Bildpunkt in der linken Graphik auf einer lokalen Maximumstelle liegt, erhält man beispielsweise die Koordinaten $\var{sol1}$ für ein erstes Maximum.}}
+    \lang{en}{
+      \explanation[NOT edited]{You have not entered a first maximum point.}
+      \explanation[edited AND NOT correct(ans1) AND attempt <=2]{Move point $P$ in the graph on the right so that the image point of $f$ lies at a local maximum point of the constraint.}
+      \explanation[edited AND NOT correct(ans1) AND attempt >=3]{If you move point $P$ so that the corresponding image point in the left-hand graph lies at a local maximum, you obtain, for example, the coordinates $\var{sol1}$ for a first maximum.}}
+  \end{answer}
+  \begin{answer}
+    \lang{de}{\text{Die Koordinaten einer zweiten Maximumstelle sind gegeben durch}}
+    \lang{en}{\text{The coordinates of a second maximum point are given by}}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{1}
+    \inputAsMatrix{}{ans2}
+    \checkFuncForZero[0.05]{dirac(ans1[0]-ans2[0])+dirac(ans1[1]-ans2[1])+dirac(ans2[0]+ans2[1]-sol1[0]-sol1[1])+dirac(ans2[0]+ans2[1]-sol2[0]-sol2[1])-2}{-1}{1}{1}
+    \solution{sol2}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben keine zweite Maximumstelle angegeben.}
+      \explanation[edited AND NOT correct(ans2) AND attempt <=2]{Bewegen Sie den Punkt $P$ in der rechten Graphik so, dass der Bildpunkt von $f$ auf einer lokalen Maximumstelle der Nebenbedingung liegt.}
+      \explanation[edited AND NOT correct(ans2) AND attempt >=3]{Bewegt man den Punkt $P$ so, dass der zugehörige Bildpunkt in der linken Graphik auf einer lokalen Maximumstelle liegt, erhält man beispielsweise die Koordinaten $\var{sol2}$ für ein zweites Maximum.}}
+    \lang{en}{
+      \explanation[NOT edited]{You have not entered a second maximum point.}
+      \explanation[edited AND NOT correct(ans2) AND attempt <=2]{Move point $P$ in the graph on the right so that the image point of $f$ lies at a local maximum point of the constraint.}
+      \explanation[edited AND NOT correct(ans2) AND attempt >=3]{If you move point $P$ so that the corresponding image point in the left-hand graph lies at a local maximum, you obtain, for example, the coordinates $\var{sol2}$ for a second maximum.}}
+  \end{answer}
+  \begin{answer}
+    \lang{de}{\text{Die Koordinaten einer ersten Minimumstelle sind gegeben durch}}
+    \lang{en}{\text{The coordinates of a first minimum point are given by}}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{1}
+    \inputAsMatrix{}{ans3}
+    \checkFuncForZero[0.05]{dirac(ans3[0]+ans3[1]-sol3[0]-sol3[1])+dirac(ans3[0]+ans3[1]-sol4[0]-sol4[1])-1}{-1}{1}{1}
+    \solution{sol3}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben keine erste Minimumstelle angegeben.}
+      \explanation[edited AND NOT correct(ans3) AND attempt <=2]{Bewegen Sie den Punkt $P$ in der rechten Graphik so, dass der Bildpunkt von $f$ auf einer lokalen Minimumstelle der Nebenbedingung liegt.}
+      \explanation[edited AND NOT correct(ans3) AND attempt >=3]{Bewegt man den Punkt $P$ so, dass der zugehörige Bildpunkt in der linken Graphik auf einer lokalen Minimumstelle liegt, erhält man beispielsweise die Koordinaten $\var{sol3}$ für ein erstes Minimum.}}
+    \lang{en}{
+      \explanation[NOT edited]{You have not entered a first minimum point.}
+      \explanation[edited AND NOT correct(ans3) AND attempt <=2]{Move point $P$ in the graph on the right so that the image point of $f$ lies at a local minimum point of the constraint.}
+      \explanation[edited AND NOT correct(ans3) AND attempt >=3]{If you move point $P$ so that the corresponding image point in the left-hand graph lies at a local maximum, you obtain, for example, the coordinates $\var{sol3}$ for a first minimum.}}
+  \end{answer}
+  \begin{answer}
+    \lang{de}{\text{Die Koordinaten einer zweiten Minimumstelle sind gegeben durch}}
+    \lang{en}{\text{The coordinates of a second minimum point are given by}}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{1}
+    \inputAsMatrix{}{ans4}
+    \checkFuncForZero[0.05]{dirac(ans3[0]-ans4[0])+dirac(ans3[1]-ans4[1])+dirac(ans4[0]+ans4[1]-sol3[0]-sol3[1])+dirac(ans4[0]+ans4[1]-sol4[0]-sol4[1])-2}{-1}{1}{1}
+    \solution{sol4}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben keine zweite Minimumstelle angegeben.}
+      \explanation[edited AND NOT correct(ans4) AND attempt <=2]{Bewegen Sie den Punkt $P$ in der rechten Graphik so, dass der Bildpunkt von $f$ auf einer lokalen Minimumstelle der Nebenbedingung liegt.}
+      \explanation[edited AND NOT correct(ans4) AND attempt >=3]{Bewegt man den Punkt $P$ so, dass der zugehörige Bildpunkt in der linken Graphik auf einer lokalen Minimumstelle liegt, erhält man beispielsweise die Koordinaten $\var{sol4}$ für ein zweites Minimum.}}
+    \lang{en}{
+      \explanation[NOT edited]{You have not entered a second minimum point.}
+      \explanation[edited AND NOT correct(ans4) AND attempt <=2]{Move point $P$ in the graph on the right so that the image point of $f$ lies at a local minimum point of the constraint.}
+      \explanation[edited AND NOT correct(ans4) AND attempt >=3]{If you move point $P$ so that the corresponding image point in the left-hand graph lies at a local minimum, you obtain, for example, the coordinates $\var{sol4}$ for a second minimum.}}
+  \end{answer}
+
+\end{question}
+
+\begin{question}
+  \begin{variables}
+    \randint[Z]{a}{-3}{3}
+    \randint[Z]{b}{-3}{3}
+    \randint{r1_pre}{1}{30}
+    \randint{r2_pre}{1}{30}
+    \randadjustIf{r2_pre}{abs(r1_pre-r2_pre)<=5}
+    \function[calculate,2]{r1}{r1_pre/10}
+    \function[calculate,2]{r2}{r2_pre/10}
+    \function[normalize]{f}{a*x^2/r1^2+b*y^2/r2^2}
+    \function[normalize]{g}{x^2/r1^2+y^2/r2^2-1}
+
+    \matrix{pre_sol1}{r1 \\ a}
+    \matrix{pre_sol2}{-r1 \\ a}
+    \matrix[calculate,2]{pre_sol3}{r2 \\ b}
+    \matrix[calculate,2]{pre_sol4}{-r2 \\ b}
+
+  \begin{switch}
+    \begin{case}{a>b}
+    \matrix{sol1}{pre_sol1}
+    \matrix{sol2}{pre_sol2}
+    \matrix{sol3}{pre_sol3}
+    \matrix{sol4}{pre_sol4}
+    \end{case}
+    \begin{case}{a<b}
+    \matrix{sol1}{pre_sol3}
+    \matrix{sol2}{pre_sol4}
+    \matrix{sol3}{pre_sol1}
+    \matrix{sol4}{pre_sol2}
+    \end{case}
+    \begin{default}
+    \matrix{sol1}{pre_sol1}
+    \matrix{sol2}{pre_sol2}
+    \matrix{sol3}{pre_sol3}
+    \matrix{sol4}{pre_sol4}
+    \end{default}
+  \end{switch}
+
+    \number{zero}{0}
+    \number{three}{3}
+    \substitute[normalize]{f_0y}{f}{x}{zero}
+    \substitute[normalize]{f_03}{f_0y}{y}{three}
+  \end{variables}
+
+  \lang{de}{
+  \text{Gegeben sind die Funktionen  $f,g:\R^2\to\R$ mit $f(x,y)=\var{f}$ und $g(x,y)=\var{g}$. \\
+        Bestimmen Sie die Extrema von $f$ unter der Nebenbedingung $g(x,y)=0$ graphisch. Verwenden Sie dafür die folgende interaktive Visualisierung. \\
+        Dabei können Sie in der rechten 2-D-Abbildung den Punkt $\textcolor{red}{P}$ auf der Ellipse verschieben. In der 3-D-Abbildung links sehen sie ebenfalls die zweidimensionale Ellipse in \textcolor{green}{grün}. \\
+        In \textcolor{LIGHT_BLUE}{hellblau} sehen Sie den Graphen der Funktion $f$. Außerdem wird das Bild der Ellipse unter $f$ in \textcolor{blue}{blau} dargestellt. \\
+        \visualization{extr_2}
+        Geben Sie die Koordinaten der Maxima und Minima an. Runden Sie auf 2 Nachkommastellen.}}
+
+  \lang{en}{
+  \text{Given are the functions $f,g:\R^2\to\R$ with $f(x,y)=\var{f}$ and $g(x,y)=\var{g}$. \\
+        Determine graphically the extrema of $f$ under the constraint $g(x,y)=0$ . For that, use the interactive visualization below. \\
+        You can move point $\textcolor{red}{P}$ on the ellipse in the 2-D figure on the right. In the 3-D figure on the left, you can also see the two-dimensional ellipse in \textcolor{green}{green}. \\
+        In \textcolor{LIGHT_BLUE}{light blue}, you can see the graph of the function $f$. In addition, the image of the ellipse of $f$ is shown in \textcolor{blue}{blue}. \\
+        \visualization{extr_2}
+        Enter the coordinates of the maxima and minima. Round to 2 decimal places.}}
+
+  \begin{answer}
+    \lang{de}{\text{Die Koordinaten einer ersten Maximumstelle sind gegeben durch}}
+    \lang{en}{\text{The coordinates of a first maximum point are given by}}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{1}
+    \inputAsMatrix{}{ans1}
+    \checkFuncForZero[0.05]{dirac(ans1[0]-sol1[0])+dirac(ans1[0]-sol2[0])+dirac(ans1[1]-sol1[1])-2}{-1}{1}{1}
+    \solution{sol1}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben keine erste Maximumstelle angegeben.}
+      \explanation[edited AND NOT correct(ans1) AND attempt <=2]{Bewegen Sie den Punkt $P$ in der rechten Graphik so, dass der Bildpunkt von $f$ auf einer lokalen Maximumstelle der Nebenbedingung liegt.}
+      \explanation[edited AND NOT correct(ans1) AND attempt >=3]{Bewegt man den Punkt $P$ so, dass der zugehörige Bildpunkt in der linken Graphik auf einer lokalen Maximumstelle liegt, erhält man beispielsweise die Koordinaten $\var{sol1}$ für ein erstes Maximum.}}
+    \lang{en}{
+      \explanation[NOT edited]{You have not entered a first maximum point.}
+      \explanation[edited AND NOT correct(ans1) AND attempt <=2]{Move point $P$ in the graph on the right so that the image point of $f$ lies at a local maximum point of the constraint.}
+      \explanation[edited AND NOT correct(ans1) AND attempt >=3]{If you move point $P$ so that the corresponding image point in the left-hand graph lies at a local maximum, you obtain, for example, the coordinates $\var{sol1}$ for a first maximum.}}
+  \end{answer}
+
+  \begin{answer}
+    \lang{de}{\text{Die Koordinaten einer zweiten Maximumstelle sind gegeben durch}}
+    \lang{en}{\text{The coordinates of a second maximum point are given by}}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{1}
+    \inputAsMatrix{}{ans2}
+    \checkFuncForZero[0.05]{dirac(ans2[0]-ans1[0])+dirac(ans2[0]-sol1[0])+dirac(ans2[0]-sol2[0])+dirac(ans2[1]-sol1[1])-2}{-1}{1}{1}
+    \solution{sol2}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben keine zweite Maximumstelle angegeben.}
+      \explanation[edited AND NOT correct(ans2) AND attempt <=2]{Bewegen Sie den Punkt $P$ in der rechten Graphik so, dass der Bildpunkt von $f$ auf einer lokalen Maximumstelle der Nebenbedingung liegt.}
+      \explanation[edited AND NOT correct(ans2) AND attempt >=3]{Bewegt man den Punkt $P$ so, dass der zugehörige Bildpunkt in der linken Graphik auf einer lokalen Maximumstelle liegt, erhält man beispielsweise die Koordinaten $\var{sol2}$ für ein zweites Maximum.}}
+    \lang{en}{
+      \explanation[NOT edited]{You have not entered a second maximum point.}
+      \explanation[edited AND NOT correct(ans2) AND attempt <=2]{Move point $P$ in the graph on the right so that the image point of $f$ lies at a local maximum point of the constraint.}
+      \explanation[edited AND NOT correct(ans2) AND attempt >=3]{If you move point $P$ so that the corresponding image point in the left-hand graph lies at a local maximum, you obtain, for example, the coordinates $\var{sol2}$ for a second maximum.}}
+  \end{answer}
+
+  \begin{answer}
+    \lang{de}{\text{Die Koordinaten einer ersten Minimumstelle sind gegeben durch}}
+    \lang{en}{\text{The coordinates of a first minimum point are given by}}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{1}
+    \inputAsMatrix{}{ans3}
+    \checkFuncForZero[0.05]{dirac(ans3[0]-sol3[0])+dirac(ans3[0]-sol4[0])+dirac(ans3[1]-sol3[1])-2}{-1}{1}{1}
+    \solution{sol3}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben keine erste Minimumstelle angegeben.}
+      \explanation[edited AND NOT correct(ans3) AND attempt <=2]{Bewegen Sie den Punkt $P$ in der rechten Graphik so, dass der Bildpunkt von $f$ auf einer lokalen Minimumstelle der Nebenbedingung liegt.}
+      \explanation[edited AND NOT correct(ans3) AND attempt >=3]{Bewegt man den Punkt $P$ so, dass der zugehörige Bildpunkt in der linken Graphik auf einer lokalen Minimumstelle liegt, erhält man beispielsweise die Koordinaten $\var{sol3}$ für ein erstes Minimum.}}
+    \lang{en}{
+      \explanation[NOT edited]{You have not entered a first minimum point.}
+      \explanation[edited AND NOT correct(ans3) AND attempt <=2]{Move point $P$ in the graph on the right so that the image point of $f$ lies at a local minimum point of the constraint.}
+      \explanation[edited AND NOT correct(ans3) AND attempt >=3]{If you move point $P$ so that the corresponding image point in the left-hand graph lies at a local maximum, you obtain, for example, the coordinates $\var{sol3}$ for a first minimum.}}
+  \end{answer}
+
+  \begin{answer}
+    \lang{de}{\text{Die Koordinaten einer zweiten Minimumstelle sind gegeben durch}}
+    \lang{en}{\text{The coordinates of a second minimum point are given by}}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{1}
+    \inputAsMatrix{}{ans4}
+    \checkFuncForZero[0.05]{dirac(ans4[0]-ans3[0])+dirac(ans4[0]-sol3[0])+dirac(ans4[0]-sol4[0])+dirac(ans4[1]-sol3[1])-2}{-1}{1}{1}
+    \solution{sol4}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben keine zweite Minimumstelle angegeben.}
+      \explanation[edited AND NOT correct(ans4) AND attempt <=2]{Bewegen Sie den Punkt $P$ in der rechten Graphik so, dass der Bildpunkt von $f$ auf einer lokalen Minimumstelle der Nebenbedingung liegt.}
+      \explanation[edited AND NOT correct(ans4) AND attempt >=3]{Bewegt man den Punkt $P$ so, dass der zugehörige Bildpunkt in der linken Graphik auf einer lokalen Minimumstelle liegt, erhält man beispielsweise die Koordinaten $\var{sol4}$ für ein zweites Minimum.}}
+    \lang{en}{
+      \explanation[NOT edited]{You have not entered a second minimum point.}
+      \explanation[edited AND NOT correct(ans4) AND attempt <=2]{Move point $P$ in the graph on the right so that the image point of $f$ lies at a local minimum point of the constraint.}
+      \explanation[edited AND NOT correct(ans4) AND attempt >=3]{If you move point $P$ so that the corresponding image point in the left-hand graph lies at a local minimum, you obtain, for example, the coordinates $\var{sol4}$ for a second minimum.}}
+  \end{answer}
+\end{question}
+\end{problem}
+
+\embedmathlet{gwtmathlet}
+\end{content}

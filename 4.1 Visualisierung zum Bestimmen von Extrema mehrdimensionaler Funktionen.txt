@@ -1,0 +1,488 @@
+\documentclass{mumie.problem.gwtmathlet}
+\begin{metainfo}
+  \name{
+    \lang{de}{Aufgabe und Visualisierung zu Extrema einer mehrdimensionalen Funktion}
+    \lang{en}{Task and visualization for extrem values of a multidimensional function}
+  }
+  \begin{description}
+    \lang{en}{...}
+    \lang{de}{...}
+  \end{description}
+  \corrector{system/problem/GenericCorrector.meta.xml}
+  \begin{components}
+
+           \component{js_lib}{system/problem/GenericMathlet.meta.xml}{gwtmathlet}
+  \end{components} 
+  \begin{links}
+
+  \end{links}
+  \creategeneric
+\end{metainfo}
+
+\usepackage{mumie.genericproblem}
+
+\begin{content}
+\begin{block}[annotation]
+Copy of : /home/mumie/checkin/content/playground/Matthias_Gampert/art_Extremwertbestimmung.src.tex
+\end{block}
+
+\title{Bestimmen von Extrema im Mehrdimensionalen}
+
+\begin{visualizationwrapper}
+\begin{visualization}[false]{extr_values}
+  \begin{variables}
+    \number{k}{2}
+    \slider[0.5]{s}{k,-10,10}
+    \function{f_s}{1/4*x^4-s/3*x^3-1/2*x^2+s*x+s/2*y^2}
+    \number[calculate]{s3}{s/3}
+  \end{variables}
+
+\label{s}{${a}$}
+
+  \begin{canvasXYZ}
+    \plotSize{300,300}
+    \plotX{-5,5}
+    \plotY{-5,5}
+    \plotZ{-5,5}
+    \plot[coordinateSystem]{f_s}
+    \xAxis{$x$}
+    \yAxis{$y$}
+    \zAxis{$f(x,y)$}
+  \end{canvasXYZ}
+
+  \begin{canvas}
+    \plotSize{300,50}
+    \plotLeft{-3}
+    \plotRight{3}
+    \sliderPositioning{s}{width:0.85}
+    \plot[noToolbar]{s}
+  \end{canvas}
+
+\text{Aktuell zu sehen ist die Funktion $f(x,y)=\frac{1}{4}\cdot x^4-\frac{\var{s}}{3}\cdot x^3-\frac{1}{2}\cdot x^2+\var{s}\cdot x+\frac{\var{s}}{2}\cdot y^2$.}
+
+\end{visualization}
+
+\begin{visualization}[false]{extr_values1}
+  \begin{variables}
+    \number{k}{0.5}
+    \slider[0.1]{s}{k,-2,2}
+    \function{f_s}{x^4-x^2+s*y^2}
+  \end{variables}
+
+\label{s}{${a}$}
+
+  \begin{canvasXYZ}
+    \plotSize{300,300}
+    \plotX{-3,3}
+    \plotY{-3,3}
+    \plotZ{-3,3}
+    \plot[coordinateSystem]{f_s}
+    \xAxis{$x$}
+    \yAxis{$y$}
+    \zAxis{$f(x,y)$}
+  \end{canvasXYZ}
+
+  \begin{canvas}
+    \plotSize{300,50}
+    \plotLeft{-3}
+    \plotRight{3}
+    \sliderPositioning{s}{width:0.85}
+    \plot[noToolbar]{s}
+  \end{canvas}
+
+  \text{Aktuell zu sehen ist die Funktion $f(x,y)=x^4+\var{s}\cdot y^2-x^2$.}
+
+\end{visualization}
+\end{visualizationwrapper}
+
+\begin{problem}
+\randomquestionpool{1}{2}
+\chooseRandomPools{1}
+\begin{question}
+\field{rational}
+\precision{2}
+  \begin{variables}
+    \randint[Z]{a_pre}{-20}{20}
+    \randadjustIf{a_pre}{a_pre^2-4=0}
+    \function[calculate,2]{a}{(a_pre*5)/10}
+    \function[normalize]{f}{1/4*x^4-a/3*x^3-1/2*x^2+a*x+a/2*y^2}
+    \function[normalize]{dfx}{x^3-a*x^2-x+a}
+    \function[normalize]{dfy}{a*y}
+    \function[normalize]{dfxx}{3*x^2-2*a*x-1}
+    \pmatrix{nabla_f}{dfx \\ dfy}
+    \pmatrix{H_f}{dfxx & 0 \\ 0 & a}
+    \begin{switch}
+      \begin{case}{a>1}
+      \pmatrix{sol1}{-1 & 0}
+      \pmatrix{sol2}{1 & 0}
+      \pmatrix{sol3}{a & 0}
+      \pmatrix[calculate]{H_f1}{2+2*a & 0 \\ 0 & a}
+      \pmatrix[calculate]{H_f2}{2-2*a & 0 \\ 0 & a}
+      \pmatrix[calculate]{H_f3}{a^2-1 & 0 \\ 0 & a}
+      \end{case}
+      \begin{case}{a<-1}
+      \pmatrix{sol1}{a & 0}
+      \pmatrix{sol2}{-1 & 0}
+      \pmatrix{sol3}{1 & 0}
+      \pmatrix[calculate]{H_f2}{2+2*a & 0 \\ 0 & a}
+      \pmatrix[calculate]{H_f3}{2-2*a & 0 \\ 0 & a}
+      \pmatrix[calculate]{H_f1}{a^2-1 & 0 \\ 0 & a}
+      \end{case}
+      \begin{default}
+      \pmatrix{sol1}{-1 & 0}
+      \pmatrix{sol2}{a & 0}
+      \pmatrix{sol3}{1 & 0}
+      \pmatrix[calculate]{H_f1}{2+2*a & 0 \\ 0 & a}
+      \pmatrix[calculate]{H_f3}{2-2*a & 0 \\ 0 & a}
+      \pmatrix[calculate]{H_f2}{a^2-1 & 0 \\ 0 & a}
+      \end{default}
+    \end{switch}
+  \end{variables}
+
+\text{In dieser Aufgabe werden Sie Schritt für Schritt die Extrema der Funktion $f:\R^2\to\R$ mit $f(x,y)=\frac{1}{4}\cdot x^4-\frac{a}{3}\cdot x^3-\frac{1}{2}\cdot x^2+a\cdot x+\frac{a}{2}\cdot y^2$ bestimmen. \\
+      Hierbei ist $a\in[-10;10]$ ein Parameter. \\
+      Machen Sie sich zunächst mithilfe der folgenden Visualisierung mit den Veränderungen von $f$ abhängig von $a$ vertraut: \\
+      \visualization{extr_values} 
+      Nun ist $a=\var{a}$ und damit $f(x,y)=\var{f}$ gegeben. Wir wollen nun die Extrema von $f$ bestimmen.}
+
+  \begin{answer}
+    \text{(1) Bestimmen Sie dafür zunächst $\nabla f$. Es gilt $\nabla f(x,y)=$}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{1}
+    \checkAsFunction{x,y}{-10}{10}{100}
+    \solution{nabla_f}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben $\nabla f$ nicht angegeben.}
+      \explanation[edited AND NOT correct(ans_1) AND attempt <=2]{Der erste Eintrag von $\nabla f$ ist $\frac{\partial f}{\partial x}$. Der zweite Eintrag ist $\frac{\partial f}{\partial y}$.}
+      \explanation[edited AND NOT correct(ans_1) AND attempt >=3]{Berechnet man die partiellen Ableitungen von $f$ nach $x$ und $y$, erhält man $\nabla f(x,y)=\var{nabla_f}$.}}
+  \end{answer}
+
+  \begin{answer}
+    \text{(2) Da uns auch die Art der Extrema interessiert, benötigen wir noch die Hesse-Matrix $H_f(x,y)=$}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{2}
+    \checkAsFunction{x,y}{-10}{10}{100}
+    \solution{H_f}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben keine Werte von $H_f(x,y)$ nicht angegeben.}
+      \explanation[edited AND NOT correct(ans_2) AND attempt <=2]{Der Eintrag oben links von $H_f$ ist $\frac{{\partial}^2 f}{\partial x^2}$. Der Eintrag unten rechts ist $\frac{{\partial}^2 f}{\partial y^2}$. Auf der Nebendiagonalen steht die partielle Ableitung $\frac{{\partial}^2 f}{\partial x\partial y}$. Dabei ist es nach dem Satz von Schwartz egal, ob Sie zuerst nach $x$ oder $y$ ableiten.}
+      \explanation[edited AND NOT correct(ans_2) AND attempt >=3]{Berechnet man alle zweiten partiellen Ableitungen von $f$, erhält man $H_f(x,y)=\var{H_f}$.}}
+  \end{answer}
+
+  \begin{answer}
+    \text{(3) Über die Nullstellen von $\nabla f(x,y)$ können Sie nun die kritischen Punkte bestimmen. \\
+          Geben Sie diese im Folgenden an. Ordnen Sie die Punkte dabei beginnend mit dem kleinsten $x$-Wert und endend mit dem größten $x$-Wert. \\
+          Es ist $(x_1,y_1)=$}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{1}{2}
+    \solution{sol1}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben keinen Punkt $(x_1,y_1)$ angegeben.}
+      \explanation[edited AND NOT correct(ans_3) AND attempt <=2]{Setzen Sie $\nabla f(x,y)=0$. Damit erhalten Sie mehrere kritische Punkte. Geben Sie hier den Punkt mit dem kleinsten $x$-Wert an.}
+      \explanation[edited AND NOT correct(ans_3) AND attempt>=3]{Setzt man $\nabla f(x,y)=0$ und löst die Gleichungen erhält man 3 kritische Punkte. Der mit kleinsten $x$-Wert ist $(x_1,y_1)=\var{sol1}$.}}
+  \end{answer}
+
+  \begin{answer}
+    \text{Es ist $(x_2,y_2)=$}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{1}{2}
+    \solution{sol2}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben keinen Punkt $(x_2,y_2)$ angegeben.}
+      \explanation[edited AND NOT correct(ans_4) AND attempt <=2]{Setzen Sie $\nabla f(x,y)=0$. Damit erhalten Sie mehrere kritische Punkte. Geben Sie hier den Punkt mit dem zweitkleinsten $x$-Wert an.}
+      \explanation[edited AND NOT correct(ans_4) AND attempt>=3]{Setzt man $\nabla f(x,y)=0$ und löst die Gleichungen erhält man 3 kritische Punkte. Der mit zweitkleinstem $x$-Wert ist $(x_2,y_2)=\var{sol2}$.}}
+  \end{answer}
+
+  \begin{answer}
+    \text{Es ist $(x_3,y_3)=$}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{1}{2}
+    \solution{sol3}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben keinen Punkt $(x_3,y_3)$ angegeben.}
+      \explanation[edited AND NOT correct(ans_5) AND attempt <=2]{Setzen Sie $\nabla f(x,y)=0$. Damit erhalten Sie mehrere kritische Punkte. Geben Sie hier den Punkt mit dem größten $x$-Wert an.}
+      \explanation[edited AND NOT correct(ans_5) AND attempt>=3]{Setzt man $\nabla f(x,y)=0$ und löst die Gleichungen erhält man 3 kritische Punkte. Der mit größtem $x$-Wert ist $(x_3,y_3)=\var{sol3}$.}}
+  \end{answer}
+
+  \begin{answer}
+    \text{(4) Bestimmen Sie die Hesse-Matrizen an den kritischen Punkten. Es ist $H_f(x_1,y_1)=$}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{2}
+    \solution{H_f1}
+    \lang{de}{
+      \explanation[NOT edited]{Setzen Sie den Punkt $(x_1,y_1)$ in $H_f(x,y)$ ein.}
+      \explanation[edited AND NOT correct(ans_6)]{Setzt man $(x_1,y_1)$ in $H_f$ ein, erhält man $H_f(x_1,y_1)=\var{H_f1}$.}}
+  \end{answer}
+
+  \begin{answer}
+    \text{Es ist $H_f(x_2,y_2)=$}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{2}
+    \solution{H_f2}
+    \lang{de}{
+      \explanation[NOT edited]{Setzen Sie den Punkt $(x_2,y_2)$ in $H_f(x,y)$ ein.}
+      \explanation[edited AND NOT correct(ans_7)]{Setzt man $(x_2,y_2)$ in $H_f$ ein, erhält man $H_f(x_2,y_2)=\var{H_f2}$.}}
+  \end{answer}
+
+  \begin{answer}
+    \text{Es ist $H_f(x_3,y_3)=$}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{2}
+    \solution{H_f3}
+    \lang{de}{
+      \explanation[NOT edited]{Setzen Sie den Punkt $(x_3,y_3)$ in $H_f(x,y)$ ein.}
+      \explanation[edited AND NOT correct(ans_8)]{Setzt man $(x_3,y_3)$ in $H_f$ ein, erhält man $H_f(x_3,y_3)=\var{H_f3}$.}}
+  \end{answer}
+
+  \begin{answer}
+    \text{(5) Damit können Sie nun die Art der Extrema bestimmen:}
+    \type{mc.multiple}
+    \begin{choice}
+      \text{$(x_1,y_1)$ ist ein lokales Maximum.}
+      \solution{false}
+    \end{choice}
+    \begin{choice}
+      \text{$(x_1,y_1)$ ist ein lokales Minimum.}
+      \solution{compute}
+      \iscorrect{a}{>}{0}
+    \end{choice}
+    \begin{choice}
+      \text{$(x_1,y_1)$ ist ein Sattelpunkt.}
+      \solution{compute}
+      \iscorrect{a}{<}{0}
+    \end{choice}
+    \begin{choice}
+      \text{$(x_2,y_2)$ ist ein lokales Maximum.}
+      \solution{compute}
+      \iscorrect{a}{<}{0}
+    \end{choice}
+    \begin{choice}
+      \text{$(x_2,y_2)$ ist ein lokales Minimum.}
+      \solution{false}
+    \end{choice}
+    \begin{choice}
+      \text{$(x_2,y_2)$ ist ein Sattelpunkt.}
+      \solution{compute}
+      \iscorrect{a}{>}{0}
+    \end{choice}
+    \begin{choice}
+      \text{$(x_3,y_3)$ ist ein lokales Maximum.}
+      \solution{false}
+    \end{choice}
+    \begin{choice}
+      \text{$(x_3,y_3)$ ist ein lokales Minimum.}
+      \solution{compute}
+      \iscorrect{a}{>}{0}
+    \end{choice}
+    \begin{choice}
+      \text{$(x_3,y_3)$ ist ein Sattelpunkt.}
+      \solution{compute}
+      \iscorrect{a}{<}{0}
+    \end{choice}
+    \lang{de}{
+      \explanation[equalChoice(100??????) AND a>0]{Es ist $\det(\var{H_f1})>0$ aber alle Einträge sind größer 0. $(x_1,y_1)$ kann also kein Maximum sein.}
+      \explanation[equalChoice(100??????) AND a<0]{Es ist $\det(\var{H_f1})<0$. $(x_1,y_1)$ kann also kein Maximum sein.}
+      \explanation[equalChoice(010??????) AND a<0]{Es ist $\det(\var{H_f1})<0$. $(x_1,y_1)$ kann also kein Minimum sein.}
+      \explanation[equalChoice(001??????) AND a>0]{Es ist $\det(\var{H_f1})>0$. $(x_1,y_1)$ kann also keine Sattelstelle sein.}
+      \explanation[equalChoice(???100???) AND a>0]{Es ist $\det(\var{H_f2})<0$. $(x_2,y_2)$ kann also kein Maximum sein.}
+      \explanation[equalChoice(???010???) AND a<0]{Es ist $\det(\var{H_f2})>0$ aber alle Einträge sind kleiner 0. $(x_2,y_2)$ kann also kein Minimum sein.}
+      \explanation[equalChoice(???010???) AND a>0]{Es ist $\det(\var{H_f2})<0$. $(x_2,y_2)$ kann also kein Minimum sein.}
+      \explanation[equalChoice(???001???) AND a<0]{Es ist $\det(\var{H_f2})>0$. $(x_2,y_2)$ kann also keine Sattelstelle sein.}
+      \explanation[equalChoice(??????100) AND a>0]{Es ist $\det(\var{H_f3})>0$ aber alle Einträge sind größer 0. $(x_3,y_3)$ kann also kein Maximum sein.}
+      \explanation[equalChoice(??????100) AND a<0]{Es ist $\det(\var{H_f3})<0$. $(x_3,y_3)$ kann also kein Maximum sein.}
+      \explanation[equalChoice(??????010) AND a<0]{Es ist $\det(\var{H_f3})<0$. $(x_3,y_3)$ kann also kein Minimum sein.}
+      \explanation[equalChoice(??????001) AND a>0]{Es ist $\det(\var{H_f3})>0$. $(x_3,y_3)$ kann also keine Sattelstelle sein.}}
+  \end{answer}
+  
+\end{question}
+
+\begin{question}
+\precision{2}
+  \begin{variables}
+    \randint[Z]{a_pre}{-20}{20}
+    \function[calculate,2]{a}{a_pre/10}
+    \function{f}{x^4+a*y^2-x^2}
+    \pmatrix{nabla_f}{4*x^3-2*x \\ 2*a*y}
+    \pmatrix[calculate]{sol1}{-1/sqrt(2) & 0}
+    \pmatrix{sol2}{0 & 0}
+    \pmatrix[calculate]{sol3}{1/sqrt(2) & 0}
+    \pmatrix{H_f}{12*x^2-2 & 0 \\ 0 & 2*a}
+    \pmatrix[calculate,2]{H_f1}{4 & 0 \\ 0 & 2*a}
+    \pmatrix[calculate,2]{H_f2}{-2 & 0 \\ 0 & 2*a}
+    \pmatrix[calculate,2]{H_f3}{4 & 0 \\ 0 & 2*a}
+  \end{variables}
+
+  \text{In dieser Aufgabe werden Sie Schritt für Schritt die Extrema der Funktion $f:\R^2\to\R$ mit $f(x,y)=x^4+a\cdot y^2-x^2$ bestimmen. \\
+        Hierbei ist $a\in[-2;2]$ ein fester Parameter. Machen Sie sich zunächst mithilfe der folgenden Visualisierung mit den Veränderungen von $f$ abhängig von $a$ vertraut: \\
+        \visualization{extr_values1}
+        Nun ist $a=\var{a}$ fest vorgegeben und damit $f(x,y)=\var{f}$. Wir wollen nun die Extrema von $f$ bestimmen. \\
+        Bestimmen Sie dafür zuerst $\nabla f$ und die Hesse-Matrix $H_f(x,y)$.}
+
+  \begin{answer}
+    \text{(1) Es ist $\nabla f(x,y)=$}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{1}
+    \checkAsFunction{x,y}{-10}{10}{100}
+    \solution{nabla_f}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben $\nabla f$ nicht angegeben.}
+      \explanation[edited AND NOT correct(ans_1) AND attempt <=2]{Der erste Eintrag von $\nabla f$ ist $\frac{\partial f}{\partial x}$. Der zweite Eintrag ist $\frac{\partial f}{\partial y}$.}
+      \explanation[edited AND NOT correct(ans_1) AND attempt >=3]{Berechnet man die partiellen Ableitungen von $f$ nach $x$ und $y$, erhält man $\nabla f(x,y)=\var{nabla_f}$.}}
+  \end{answer}
+
+  \begin{answer}
+    \text{(2) Es gilt für die Hesse-Matrix $H_f(x,y)=$}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{2}
+    \checkAsFunction{x,y}{-10}{10}{100}
+    \solution{H_f}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben keine Werte von $H_f(x,y)$ nicht angegeben.}
+      \explanation[edited AND NOT correct(ans_2) AND attempt <=2]{Der Eintrag oben links von $H_f$ ist $\frac{{\partial}^2 f}{\partial x^2}$. Der Eintrag unten rechts ist $\frac{{\partial}^2 f}{\partial y^2}$. Auf der Nebendiagonalen steht die partielle Ableitung $\frac{{\partial}^2 f}{\partial x\partial y}$. Dabei ist es nach dem Satz von Schwartz egal, ob Sie zuerst nach $x$ oder $y$ ableiten.}
+      \explanation[edited AND NOT correct(ans_2) AND attempt >=3]{Berechnet man alle zweiten partiellen Ableitungen von $f$, erhält man $H_f(x,y)=\var{H_f}$.}}
+  \end{answer}
+
+  \begin{answer}
+    \text{(3) Bestimmen Sie nun die kritischen Punkte von $f$ über die Nullstellen von $\nabla f$. Geben Sie diese im Folgenden an. Ordnen Sie die Punkte dabei größer werdend und beginnend mit dem kleinsten $x$-Wert. Es ist $(x_1,y_1)=$}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{1}{2}
+    \solution{sol1}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben keinen Punkt $(x_1,y_1)$ angegeben.}
+      \explanation[edited AND NOT correct(ans_3) AND attempt <=2]{Setzen Sie $\nabla f(x,y)=0$. Damit erhalten Sie mehrere kritische Punkte. Geben Sie hier den Punkt mit dem kleinsten $x$-Wert an.}
+      \explanation[edited AND NOT correct(ans_3) AND attempt>=3]{Setzt man $\nabla f(x,y)=0$ und löst die Gleichungen erhält man 3 kritische Punkte. Der mit kleinsten $x$-Wert ist $(x_1,y_1)=\var{sol1}$.}}
+  \end{answer}
+
+  \begin{answer}
+    \text{Es ist $(x_2,y_2)=$}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{1}{2}
+    \solution{sol2}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben keinen Punkt $(x_2,y_2)$ angegeben.}
+      \explanation[edited AND NOT correct(ans_4) AND attempt <=2]{Setzen Sie $\nabla f(x,y)=0$. Damit erhalten Sie mehrere kritische Punkte. Geben Sie hier den Punkt mit dem zweitkleinsten $x$-Wert an.}
+      \explanation[edited AND NOT correct(ans_4) AND attempt>=3]{Setzt man $\nabla f(x,y)=0$ und löst die Gleichungen erhält man 3 kritische Punkte. Der mit zweitkleinstem $x$-Wert ist $(x_2,y_2)=\var{sol2}$.}}
+  \end{answer}
+  
+  \begin{answer}
+    \text{Es ist $(x_3,y_3)=$}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{1}{2}
+    \solution{sol3}
+    \lang{de}{
+      \explanation[NOT edited]{Sie haben keinen Punkt $(x_3,y_3)$ angegeben.}
+      \explanation[edited AND NOT correct(ans_5) AND attempt <=2]{Setzen Sie $\nabla f(x,y)=0$. Damit erhalten Sie mehrere kritische Punkte. Geben Sie hier den Punkt mit dem größten $x$-Wert an.}
+      \explanation[edited AND NOT correct(ans_5) AND attempt>=3]{Setzt man $\nabla f(x,y)=0$ und löst die Gleichungen erhält man 3 kritische Punkte. Der mit größtem $x$-Wert ist $(x_3,y_3)=\var{sol3}$.}}
+  \end{answer}
+
+  \begin{answer}
+    \text{(4) Bestimmen Sie die Hesse-Matrizen an den kritischen Punkten. Es ist $H_f(x_1,y_1)=$}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{2}
+    \solution{H_f1}
+    \lang{de}{
+      \explanation[NOT edited]{Setzen Sie den Punkt $(x_1,y_1)$ in $H_f(x,y)$ ein.}
+      \explanation[edited AND NOT correct(ans_6)]{Setzt man $(x_1,y_1)$ in $H_f$ ein, erhält man $H_f(x_1,y_1)=\var{H_f1}$.}}
+  \end{answer}
+
+  \begin{answer}
+    \text{Es ist $H_f(x_2,y_2)=$}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{2}
+    \solution{H_f2}
+    \lang{de}{
+      \explanation[NOT edited]{Setzen Sie den Punkt $(x_2,y_2)$ in $H_f(x,y)$ ein.}
+      \explanation[edited AND NOT correct(ans_7)]{Setzt man $(x_2,y_2)$ in $H_f$ ein, erhält man $H_f(x_2,y_2)=\var{H_f2}$.}}
+  \end{answer}
+
+  \begin{answer}
+    \text{Es ist $H_f(x_3,y_3)=$}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{2}
+    \solution{H_f3}
+    \lang{de}{
+      \explanation[NOT edited]{Setzen Sie den Punkt $(x_3,y_3)$ in $H_f(x,y)$ ein.}
+      \explanation[edited AND NOT correct(ans_8)]{Setzt man $(x_3,y_3)$ in $H_f$ ein, erhält man $H_f(x_3,y_3)=\var{H_f3}$.}}
+  \end{answer}
+  
+  \begin{answer}
+    \text{(5) Damit können Sie nun die Art der Extrema bestimmen:}
+    \type{mc.multiple}
+    \begin{choice}
+      \text{$(x_1,y_1)$ ist ein lokales Maximum.}
+      \solution{false}
+    \end{choice}
+    \begin{choice}
+      \text{$(x_1,y_1)$ ist ein lokales Minimum.}
+      \solution{compute}
+      \iscorrect{a}{>}{0}
+    \end{choice}
+    \begin{choice}
+      \text{$(x_1,y_1)$ ist ein Sattelpunkt.}
+      \solution{compute}
+      \iscorrect{a}{<}{0}
+    \end{choice}
+    \begin{choice}
+      \text{$(x_2,y_2)$ ist ein lokales Maximum.}
+      \solution{compute}
+      \iscorrect{a}{<}{0}
+    \end{choice}
+    \begin{choice}
+      \text{$(x_2,y_2)$ ist ein lokales Minimum.}
+      \solution{false}
+    \end{choice}
+    \begin{choice}
+      \text{$(x_2,y_2)$ ist ein Sattelpunkt.}
+      \solution{compute}
+      \iscorrect{a}{>}{0}
+    \end{choice}
+    \begin{choice}
+      \text{$(x_3,y_3)$ ist ein lokales Maximum.}
+      \solution{false}
+    \end{choice}
+    \begin{choice}
+      \text{$(x_3,y_3)$ ist ein lokales Minimum.}
+      \solution{compute}
+      \iscorrect{a}{>}{0}
+    \end{choice}
+    \begin{choice}
+      \text{$(x_3,y_3)$ ist ein Sattelpunkt.}
+      \solution{compute}
+      \iscorrect{a}{<}{0}
+    \end{choice}
+    \lang{de}{
+      \explanation[equalChoice(100) AND a>0]{Es ist zwar $\det(H_f(x_1,y_1))>0$ aber auch $f_{xx}>0$. $(x_1,y_1)$ kann also kein Maximum sein}
+      \explanation[equalChoice(100) AND a<0]{Es ist $\det(H_f(x_1,y_1))<0$. $(x_1,y_1)$ kann also kein Maximum sein.}
+      \explanation[equalChoice(010) AND a<0]{Es ist $\det(H_f(x_1,y_1))<0$. $(x_1,y_1)$ kann also kein Minimum sein.}
+      \explanation[equalChoice(001) AND a>0]{Es ist $\det(H_f(x_1,y_1))>0$. $(x_1,y_1)$ kann also keine Sattelstelle sein.}
+      \explanation[equalChoice(100) AND a>0]{Es ist $\det(H_f(x_2,y_2))<0$. $(x_2,y_2)$ kann also kein Maximum sein.}
+      \explanation[equalChoice(100) AND a<0]{Es ist zwar $\det(H_f(x_2,y_2))>0$ aber auch $f_{xx}>0$. $(x_2,y_2)$ kann also kein Minimum sein}
+      \explanation[equalChoice(010) AND a>0]{Es ist $\det(H_f(x_2,y_2))<0$. $(x_2,y_2)$ kann also kein Minimum sein.}
+      \explanation[equalChoice(001) AND a<0]{Es ist $\det(H_f(x_2,y_2))>0$. $(x_2,y_2)$ kann also keine Sattelstelle sein.}
+      \explanation[equalChoice(100) AND a>0]{Es ist zwar $\det(H_f(x_3,y_3))>0$ aber auch $f_{xx}>0$. $(x_3,y_3)$ kann also kein Maximum sein}
+      \explanation[equalChoice(100) AND a<0]{Es ist $\det(H_f(x_3,y_3))<0$. $(x_3,y_3)$ kann also kein Maximum sein.}
+      \explanation[equalChoice(010) AND a<0]{Es ist $\det(H_f(x_3,y_3))<0$. $(x_3,y_3)$ kann also kein Minimum sein.}
+      \explanation[equalChoice(001) AND a>0]{Es ist $\det(H_f(x_3,y_3))>0$. $(x_3,y_3)$ kann also keine Sattelstelle sein.}}
+  \end{answer}
+    
+\end{question}
+\end{problem}
+
+\embedmathlet{gwtmathlet}
+\end{content}

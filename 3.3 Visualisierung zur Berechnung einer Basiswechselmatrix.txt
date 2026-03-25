@@ -1,0 +1,211 @@
+\documentclass{mumie.problem.gwtmathlet}
+
+\begin{metainfo}
+  \name{
+    \lang{de}{Aufgabe und Visualisierung zur 
+              Basiswechselmatrix}
+    \lang{en}{Task and visualization for the 
+              change-of-basis matrix}
+  }
+  \begin{description}
+    \lang{en}{...}
+    \lang{de}{...}
+  \end{description}
+  \corrector{system/problem/GenericCorrector.meta.xml}
+  \begin{components}
+
+           \component{js_lib}{system/problem/GenericMathlet.meta.xml}{gwtmathlet}
+  \end{components}
+
+  \begin{links}
+
+  \end{links}
+  \creategeneric
+\end{metainfo}
+
+\usepackage{mumie.genericproblem}
+
+\begin{content}
+\begin{block}[annotation]
+Copy of : /home/mumie/checkin/content/playground/Matthias_Gampert/art_Basiswechselmatrix.src.tex
+\end{block}
+
+\title{
+  \lang{de}{Graphisches Bestimmen der Basiswechselmatrix}
+  \lang{en}{Graphical determination of change-of-basis matrix}}
+
+\begin{visualizationwrapper}
+\begin{visualization}[false]{basis_change}
+
+\begin{variables}
+    \question{1}{b11}
+    \question{1}{b12}
+    \question{1}{b21}
+    \question{1}{b22}
+
+    \number{zero}{0}
+    \number{eins}{1}
+
+    \point{E1}{eins,zero}
+    \vector{e1}{E1}
+    \point{E2}{zero,eins}
+    \vector{e2}{E2}
+
+    \point{ursprung}{0,0}
+    \point{b1}{b11,b21}
+    \point{b2}{b12,b22}
+    \vector{B1}{b1}
+    \parametricFunction{line_b1}{t*b11,t*b21,-10,10}
+    \pointOnCurve[editable]{BB1}{line_b1,1}
+    \vector{b1_vis}{BB1}
+    \parametricFunction{line_b2}{BB1[x]+t*b12,BB1[y]+t*b22,-10,10}
+    \pointOnCurve[editable]{BB2}{line_b2,1}
+    \affine{b2_vis}{BB1,BB2}
+
+    \function{lamb}{BB1[x]/b11}
+    \function{mu}{(BB2[y]-BB1[y])/b22}   
+\end{variables}
+
+\color{BB1,b1_vis}{BLUE}
+\color{BB2,b2_vis}{RED}
+\color{e1,e2}{GREEN}
+\label{E1}{${\textcolor{green}{e_1}}$}
+\label{E2}{${\textcolor{green}{e_2}}$}
+\label{BB1}{${\lambda\cdot b_1}$}
+\label{BB2}{${\lambda\cdot b_1+\mu\cdot b_2}$}
+\style{E1,E2,BB1,BB2}{size:0}
+
+\begin{canvas}
+     \plotSize{350,350}  
+     \plotLeft{-3}
+     \plotRight{3}
+     \plotTop{3}
+     \plotBottom{-3}
+     \plot[coordinateSystem,showPointCoords]{b2_vis,BB2,b1_vis,BB1,E1,e1,E2,e2}
+     \snapToGrid{0.05,0.05}
+\end{canvas}
+
+  \lang{de}{\text{Aktuell zu sehen sind: $\textcolor{blue}{\lambda\cdot b_1=\var{b1_vis}}, \: \textcolor{red}{\mu\cdot b_2=\var{b2_vis}}$\\
+                  $\textcolor{blue}{\lambda=\var{lamb}}, \: \textcolor{red}{\mu=\var{mu}}$.}}
+  \lang{en}{\text{Currently visible are: $\textcolor{blue}{\lambda\cdot b_1=\var{b1_vis}}, \: \textcolor{red}{\mu\cdot b_2=\var{b2_vis}}$\\
+                  $\textcolor{blue}{\lambda=\var{lamb}}, \: \textcolor{red}{\mu=\var{mu}}$.}}
+\end{visualization}
+\end{visualizationwrapper}
+
+\begin{problem}
+  \begin{question}
+   \field{rational} 
+   \precision{2}
+    \begin{variables}
+      \pmatrix{ee1}{1 \\ 0}
+      \pmatrix{ee2}{0 \\ 1}
+      \randint[Z]{b11}{-2}{2}
+      \randint[Z]{b21}{-2}{2}
+      \randint{b12}{-2}{2}
+      \randint[Z]{b22}{-2}{2}
+      \randint[Z]{d11}{-2}{2}
+      \randint{d21}{-2}{2}
+      \randint{d12}{-2}{2}
+      \randint[Z]{d22}{-2}{2}
+      \randadjustIf{d11,d21}{d11*d22-d12*d21=0}
+      \randadjustIf{b11,b21}{b11*b22-b12*b21=0}
+      \pmatrix{bb1}{b11 \\ b21}
+      \pmatrix{bb2}{b12 \\ b22}
+      \pmatrix{dd1}{d11 \\ d21}
+      \pmatrix{dd2}{d12 \\ d22}
+      
+      \function{det_B}{b11*b22-b12*b21}
+      \function[calculate]{tb11}{b22/det_B}
+      \function[calculate]{tb21}{-b21/det_B}
+      \function[calculate]{tb12}{-b12/det_B}
+      \function[calculate]{tb22}{b11/det_B}
+      \pmatrix{tb}{tb11 & tb12\\ tb21 & tb22}
+      \pmatrix{td}{d11 & d12\\ d21 & d22}
+
+      \randint[Z]{f11}{-5}{5}
+      \randint[Z]{f21}{-5}{5}
+      \randint[Z]{f12}{-5}{5}
+      \randint[Z]{f22}{-5}{5}
+      \pmatrix{f}{f11 & f12\\ f21 & f22}
+
+      \pmatrix[calculate]{sol}{td*f*tb}
+    \end{variables}
+
+   \lang{de}{\text{$S=\left\{e_1,e_2\right\}=\left\{\var{ee1},\var{ee2}\right\}$ sei die Standardbasis sowie $B=\left\{b_1,b_2\right\}=\left\{\var{bb1},\var{bb2}\right\}$ und $D=\left\{\var{dd1},\var{dd2}\right\}$ seien weitere Basen des $\R^2$. \\
+                   Weiter sei $f:\R^2\to\R^2$ eine lineare Abbildung mit der Matrixdarstellung ${\,}_D f_B=\var{f}$ bezüglich der Basen $B,D$. \\
+                   
+                   In der untenstehenden Grafik sehen Sie die Einheitsvektoren $\textcolor{green}{e_1,e_2}$ sowie die Basisvektoren der Basis $B$. \\
+                   Sie können das Vielfache $\textcolor{blue}{\lambda}$ des Basisvektors $\textcolor{blue}{b_1}$ und das Vielfache $\textcolor{red}{\mu}$ des Basisvektors $\textcolor{red}{b_2}$ verändern. \\
+                   Bestimmen Sie graphisch die Basistransformationsmatrix ${\,}_B T_S$. \\
+                   Um eine Basistransformation von $S$ zu $B$ zu vollführen, müssen die Basisvektoren der Basis $S$ jeweils als Linearkombination der Basisvektoren von $B$ bestimmt werden. Die skalaren Vielfache in diesen Linearkombinationen werden dann als Spaltenvektor in die Transformationsmatrix ${\,}_B T_S$ eingetragen. \\
+                   Es genügt die Einträge auf 2 Nachkommastellen zu runden. \\
+                   Sie können die Richtigkeit der gewählten Vielfachen auch durch Nachrechnen der Linearkombination überprüfen. \\
+                   \visualization{basis_change}}} 
+                   
+   \lang{en}{\text{Let $S=\left\{e_1,e_2\right\}=\left\{\var{ee1},\var{ee2}\right\}$ be the standard basis and let $B=\left\{b_1,b_2\right\}=\left\{\var{bb1},\var{bb2}\right\}$ and $D=\left\{\var{dd1},\var{dd2}\right\}$ be further bases of $\R^2$. \\
+                   Furthermore, let $f:\R^2\to\R^2$ be a linear mapping with the matrix representation ${\,}_D f_B=\var{f}$ with respect to the bases $B,D$. \\
+                   
+                   In the figure below, you can see the unit vectors $\textcolor{green}{e_1,e_2}$ and the basis vectors of the basis $B$. \\
+                   You can change the multiple $\textcolor{blue}{\lambda}$ of the basis vector $\textcolor{blue}{b_1}$ and the multiple $\textcolor{red}{\mu}$ of the basis vector $\textcolor{red}{b_2}$. \\
+                   Determine the basis transformation matrix ${\,}_B T_S$ graphically. \\
+                   To perform a basis transformation from $S$ to $B$, the basis vectors of the basis $S$ must be determined as linear combinations of the basis vectors of $B$. The scalar multiples in these linear combinations are then entered as column vectors in the transformation matrix ${\,}_B T_S$. \\
+                   It is sufficient to round the entries to two decimal places. \\
+                   You can also check the correctness of the selected multiples by rechecking the linear combination. \\
+                   \visualization{basis_change}}}       
+                   
+  \begin{answer}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{2}
+	  \lang{de}{\text{Es gilt ${\,}_B T_S=$}}
+    \lang{en}{\text{It is ${\,}_B T_S=$}}
+    \checkAsFunction[0.01]{tb11}{1}{2}{1}
+    \solution{tb}
+    \lang{de}{\explanation[NOT [edited]]{Sie haben keine Werte für die Matrix ${\,}_B T_S$ eingegeben.}
+    \explanation[edited AND NOT equal(ans,tb)]{Verschieben Sie zuerst die Vielfachen der Basisvektoren von $B$ so, dass sie auf $e_1$ landen. $a_1,a_2$ geben dann die Einträge der 1. Spalte an.}
+    \explanation[NOT equal(ans,tb) AND attempt >=3]{Verschiebt man das Vielfache von $b_1$ und $b_2$ jeweils auf $e_1$ beziehungsweise $e_2$, erhält man durch Ablesen der skalaren Vielfachen die Matrix ${\,}_B T_S=\var{tb}$.}}
+    \lang{en}{\explanation[NOT [edited]]{You have not entered any values for the matrix ${\,}_B T_S$.}
+    \explanation[edited AND NOT equal(ans,tb)]{First, shift the multiples of the basis vectors of $B$ so that they end up on $e_1$. $a_1,a_2$ then specify the entries of the first column.}
+    \explanation[NOT equal(ans,tb) AND attempt >=3]{If you shift the multiples of $b_1$ and $b_2$ to $e_1$ and $e_2$, respectively, you obtain the matrix ${\,}_B T_S=\var{tb}$ by reading off the scalar multiples.}}
+  \end{answer}
+
+  \begin{answer}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{2}
+    \lang{de}{\text{Die Matrix ${\,}_S T_D$ ist einfach ablesbar und es gilt ${\,}_S T_D=$}}
+    \lang{en}{\text{One can easily deduce the matrix ${\,}_S T_D$ from the basis vectors such that it applies ${\,}_S T_D=$}}
+    \solution{td}
+    \lang{de}{
+    \explanation[NOT [edited]]{Sie haben keine Werte für die Matrix ${\,}_S T_D$ eingegeben.}
+    \explanation[edited AND NOT equal(ans,td)]{Die Spalten von ${\,}_S T_D$ entsprechen genau den Basisvektoren von $D$.}
+    \explanation[NOT equal(ans,td) AND attempt>=3]{Fügt man die Spalten von $D$ in die Matrix ein, erhält man ${\,}_S T_D=\var{td}$.}}
+    \lang{en}{
+    \explanation[NOT [edited]]{You have not entered any values for the matrix ${\,}_S T_D$.}
+    \explanation[edited AND NOT equal(ans,td)]{The columns of ${\,}_S T_D$ correspond exactly to the basis vectors of $D$.}
+    \explanation[NOT equal(ans,td) AND attempt>=3]{If you insert the columns of $D$ into the matrix, you get ${\,}_S T_D=\var{td}$.}}
+  \end{answer}
+
+  \begin{answer}
+    \type{input.matrix}
+    \matrixType{pmatrix}
+    \format{2}{2}
+    \lang{de}{\text{Damit gilt ${\,}_S f_S=$}}
+    \lang{en}{\text{With that it follows ${\,}_S f_S=$}}
+    \checkAsFunction[0.05]{sol}{1}{2}{1}
+    \solution{sol}
+    \lang{de}{
+    \explanation[NOT [edited]]{Sie haben keine Werte für die Matrix ${\,}_S f_S$ eingegeben.}
+    \explanation[edited AND NOT equal(ans,sol)]{Um die Matrix ${\,}_S f_S$ zu ermitteln, muss man die Matrixmultiplikation ${\,}_S T_D\cdot{\,}_D f_B\cdot{\,}_B T_S$ berechnen.}
+    \explanation[NOT equal(ans,sol) AND attempt>=3]{Die Lösung der Matrixmultiplikation ist ${\,}_S f_S=\var{sol}$.}}
+    \lang{en}{
+    \explanation[NOT [edited]]{You have not entered any values for the matrix ${\,}_S f_S$.}
+    \explanation[edited AND NOT equal(ans,sol)]{To determine the matrix ${\,}_S f_S$, one must calculate the matrix multiplication ${\,}_S T_B\cdot{\,}_B f_D\cdot{\,}_D T_S$.}
+    \explanation[NOT equal(ans,sol) AND attempt>=3]{The solution of the matrix multiplication is ${\,}_S f_S=\var{sol}$.}}
+  \end{answer}  
+
+  \end{question}
+\end{problem}
+
+\embedmathlet{gwtmathlet}
+\end{content}
