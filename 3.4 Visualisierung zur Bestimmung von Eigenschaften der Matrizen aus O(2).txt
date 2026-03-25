@@ -1,0 +1,1 @@
+3.4 Visualisierung zur Bestimmung von Eigenschaften der Matrizen aus O(2).
