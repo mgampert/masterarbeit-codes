@@ -1,1 +1,0 @@
-3.3 Visualisierung zur Berechnung einer Basiswechselmatrix
