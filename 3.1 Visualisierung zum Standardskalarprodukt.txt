@@ -1,0 +1,103 @@
+\documentclass{mumie.problem.gwtmathlet}
+
+\begin{metainfo}
+  \name{
+    \lang{de}{Visualisierung zum Skalarprodukt}
+    \lang{en}{visualization for the scalar product}
+  }
+  \begin{description}
+    \lang{en}{...}
+    \lang{de}{...}
+  \end{description}
+  \corrector{system/problem/GenericCorrector.meta.xml}
+  \begin{components}
+
+           \component{js_lib}{system/problem/GenericMathlet.meta.xml}{gwtmathlet}
+  \end{components}
+
+  \begin{links}
+
+  \end{links}
+  \creategeneric
+\end{metainfo}
+
+\usepackage{mumie.genericproblem}
+
+\begin{content}
+\begin{block}[annotation]
+Copy of : /home/mumie/checkin/content/playground/Matthias_Gampert/art_Skalarprodukt.src.tex
+\end{block}
+
+\title{
+  \lang{de}{Das Standardskalarprodukt im $\R^2$}
+  \lang{en}{The dot product in $\R^2$}}
+
+\begin{visualizationwrapper}
+\begin{visualization}{sc_product}
+
+ \begin{variables}
+    \question{1}{p11}
+    \question{1}{p12}
+    \question{1}{p21}
+    \question{1}{p22}
+    
+    \point[editable]{p1}{p11,p12}
+    \point[editable]{p2}{p21,p22}
+    \vector{v1}{p1}
+    \vector{v2}{p2}
+
+    \function[calculate,1]{sc_pr}{p1[x]*p2[x]+p1[y]*p2[y]}
+    \function[calculate]{abs_p1}{sqrt(p1[x]^2+p1[y]^2)}
+    \function[calculate]{abs_p2}{sqrt(p2[x]^2+p2[y]^2)}
+    \function[calculate]{coal}{sc_pr/(abs_p1*abs_p2)}
+    \function[calculate]{bog}{acos(coal)}
+    \function[calculate]{meinpi}{3.141592653589793}
+    \function[calculate,1]{degr}{ (bog*180)/meinpi }
+
+    \point{ursprung}{0,0}
+    \angle{alpha_0}{ursprung, p1, p2}
+    \number{winkel}{alpha_0-2*pi*theta(alpha_0-pi)}
+    \angle{alpha}{ursprung, p1, winkel, 1}
+\end{variables}
+
+\color{v1,p1}{RED}
+\color{v2,p2}{BLUE}
+\color{alpha}{GREEN}
+\label{p1}{${v_1}$}
+\label{p2}{${v_2}$}
+\label{alpha}{${\alpha}$}
+\style{p1,p2}{size:0}
+
+\begin{canvas}
+     \plotSize{400,400}  
+     \plotLeft{-5}
+     \plotRight{5}
+     \plotTop{5}
+     \plotBottom{-5}
+     \plot[coordinateSystem,noMouseZooming,showPointCoords]{v1,v2,p1,p2,alpha}
+     \snapToGrid{0.1,0.1}
+     \xAxis{$x$}
+     \yAxis{$y$}
+\end{canvas}
+
+\lang{de}{\text{Der Wert des Skalarprodukts beträgt\, $\langle\textcolor{red}{v_1},\textcolor{blue}{v_2}\rangle=\var{sc_pr}$. \\
+                Der Öffnungswinkel dazu beträgt\, $\textcolor{green}{\alpha=\var{degr}\text{°}}$.}}
+
+\lang{en}{\text{The value of the scalar product is\, $\langle\textcolor{red}{v_1},\textcolor{blue}{v_2}\rangle=\var{sc_pr}$. \\ 
+                The angle between the two vectors is\, $\textcolor{green}{\alpha=\var{degr}\text{°}}$.}}
+\end{visualization}
+\end{visualizationwrapper}
+
+\begin{problem}
+  \begin{question} 
+    \begin{variables}
+      \randint{p11}{-5}{5}
+      \randint[Z]{p12}{-5}{5}
+      \randint[Z]{p21}{-5}{5}
+      \randint{p22}{-5}{5}
+    \end{variables} 
+  \end{question}
+\end{problem}
+
+\embedmathlet{gwtmathlet}
+\end{content}
